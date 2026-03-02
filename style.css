@@ -188,5 +188,98 @@ a:hover {
 }
 .mobile-toggle.active span:nth-child(2) {
   opacity: 0;
+}
+.mobile-toggle.active span:nth-child(3) {
+  transform: translateY(-9px) rotate(-45deg);
+}
 
-/* Force change iteration 3 */
+/* ---------- Buttons ---------- */
+.btn {
+  display: inline-block;
+  font-family: var(--font-heading);
+  font-size: 0.9rem;
+  font-weight: 500;
+  letter-spacing: 0.1em;
+  padding: 0.75rem 1.5rem;
+  text-align: center;
+  cursor: pointer;
+  border: 1px solid transparent;
+  transition: all 0.2s ease;
+}
+
+.btn-primary {
+  background-color: var(--accent);
+  color: #fff !important;
+}
+
+.btn-primary:hover {
+  background-color: #d12e16;
+  border-bottom-color: transparent !important;
+}
+
+.btn-secondary {
+  background-color: rgba(0,0,0,0.5);
+  border-color: #fff;
+  color: #fff !important;
+}
+
+.btn-secondary:hover {
+  background-color: rgba(255, 255, 255, 0.1);
+}
+
+.btn-block {
+  width: 100%;
+  margin-top: 1rem;
+}
+
+/* ---------- Layout & Generics ---------- */
+.content-wrapper {
+  padding-top: 80px; 
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.grid-2 {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 2rem;
+}
+
+.info-section {
+  padding: 4rem 2rem;
+  margin-bottom: 2rem;
+}
+
+.section-header {
+  margin-bottom: 2rem;
+}
+
+.section-header h2 {
+  font-size: 2.2rem;
+  color: #fff;
+}
+
+.divider {
+  width: 60px;
+  height: 4px;
+  background-color: var(--accent);
+  margin-top: 0.5rem;
+  margin-bottom: 1.5rem;
+}
+
+.section-intro {
+  font-size: 1.2rem;
+  color: var(--text-muted);
+  max-width: 800px;
+}
+
+.content-card {
+  background: var(--bg-panel);
+  padding: 2.5rem;
+  border: 1px solid var(--border-color);
+}
+
+.border-top-accent {
+  border-top: 3px solid var(--accent);
+}
+
