@@ -283,5 +283,98 @@ a:hover {
   border-top: 3px solid var(--accent);
 }
 
+.content-box {
+  background: var(--bg-panel-light);
+  padding: 1.5rem;
+  border: 1px solid var(--border-color);
+}
 
-/* Force change iteration 5 */
+.accent-box {
+  background: rgba(252, 61, 33, 0.1);
+  border-color: var(--accent);
+}
+
+.bullet-list {
+  list-style-type: square;
+  padding-left: 1.5rem;
+  margin-bottom: 1rem;
+}
+
+.bullet-list li {
+  margin-bottom: 0.5rem;
+}
+
+/* ---------- Hero Section ---------- */
+.hero-section {
+  min-height: calc(100vh - 80px);
+  display: flex;
+  align-items: center;
+  padding: 2rem;
+}
+
+.hero-content {
+  max-width: 800px;
+  background: var(--bg-panel);
+  padding: 3rem;
+  border-left: 4px solid var(--accent);
+}
+
+.mission-badge {
+  font-family: var(--font-heading);
+  font-size: 0.8rem;
+  color: var(--accent);
+  letter-spacing: 0.2em;
+  margin-bottom: 1rem;
+}
+
+.hero-content h1 {
+  font-size: clamp(2.5rem, 5vw, 4rem);
+  margin-bottom: 1.5rem;
+}
+
+.hero-content .highlight {
+  color: var(--text-muted);
+}
+
+.hero-desc {
+  font-size: 1.1rem;
+  margin-bottom: 1.5rem;
+  color: #ddd;
+}
+
+.hero-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+  margin-top: 2rem;
+}
+
+/* ---------- Facilities ---------- */
+.facility-panel {
+  background: var(--bg-panel);
+  border: 1px solid var(--border-color);
+  padding: 2.5rem;
+  margin-bottom: 3rem;
+}
+
+.facility-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  border-bottom: 1px solid var(--border-color);
+  padding-bottom: 1rem;
+  margin-bottom: 1.5rem;
+}
+
+.facility-header h3 {
+  margin-bottom: 0;
+  font-size: clamp(1.5rem, 3vw, 1.8rem);
+  color: var(--mars-orange);
+}
+
+.location-badge {
+  font-family: var(--font-heading);
+  font-size: 0.8rem;
+  color: var(--text-muted);
+  letter-spacing: 0.1em;
+}
