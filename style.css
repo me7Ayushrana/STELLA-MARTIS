@@ -379,4 +379,97 @@ a:hover {
   letter-spacing: 0.1em;
 }
 
-/* Force change iteration 7 */
+.facility-intro {
+  font-size: 1.1rem;
+  margin-bottom: 2rem;
+}
+
+.specs-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 2rem;
+}
+
+.spec-item h4 {
+  color: #fff;
+  border-bottom: 1px solid rgba(255,255,255,0.2);
+  padding-bottom: 0.5rem;
+  margin-bottom: 0.5rem;
+}
+
+.spec-item ul {
+  list-style: none;
+  font-size: 0.95rem;
+  color: #ccc;
+}
+
+/* ---------- Process Steps ---------- */
+.process-steps {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 1.5rem;
+}
+
+.step {
+  background: var(--bg-panel);
+  border: 1px solid var(--border-color);
+  position: relative;
+  display: flex;
+  flex-direction: column;
+}
+
+.step-num {
+  font-family: var(--font-heading);
+  background: var(--border-color);
+  color: #fff;
+  padding: 0.5rem 1rem;
+  font-size: 0.9rem;
+  letter-spacing: 0.1em;
+}
+
+.step-content {
+  padding: 1.5rem;
+  flex-grow: 1;
+}
+
+.step-content h4 {
+  color: var(--mars-orange);
+}
+
+.step-content p {
+  font-size: 0.95rem;
+  color: #ccc;
+}
+
+/* ---------- Partners ---------- */
+.partners-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+}
+
+.partner-item {
+  background: var(--bg-panel);
+  border: 1px solid var(--border-color);
+  padding: 1.5rem;
+  font-size: 0.95rem;
+  flex: 1 1 calc(33.333% - 1rem);
+  text-align: center;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* ---------- Forms ---------- */
+.agency-form .form-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1.5rem;
+}
+
+.form-group {
+  margin-bottom: 1.5rem;
+}
+
+.form-group label {
+  display: block;
