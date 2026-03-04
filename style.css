@@ -473,5 +473,98 @@ a:hover {
 
 .form-group label {
   display: block;
+  font-family: var(--font-heading);
+  font-size: 0.85rem;
+  letter-spacing: 0.1em;
+  color: var(--text-muted);
+  margin-bottom: 0.5rem;
+}
 
-/* Force change iteration 9 */
+.form-group input,
+.form-group textarea,
+.form-group select {
+  width: 100%;
+  padding: 0.8rem 1rem;
+  background: rgba(0, 0, 0, 0.5);
+  border: 1px solid var(--border-color);
+  color: #fff;
+  font-family: var(--font-main);
+  font-size: 1rem;
+}
+
+.form-group input:focus,
+.form-group textarea:focus,
+.form-group select:focus {
+  outline: none;
+  border-color: var(--accent);
+}
+
+.form-group select {
+  appearance: none;
+  background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='white' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e");
+  background-repeat: no-repeat;
+  background-position: right 1rem center;
+  background-size: 1em;
+}
+
+.form-group select option {
+  background: var(--bg-dark);
+  color: #fff;
+}
+
+/* ---------- Footer ---------- */
+.site-footer {
+  background: #000;
+  border-top: 2px solid var(--accent);
+  padding: 4rem 2rem 2rem;
+  margin-top: 4rem;
+}
+
+.footer-grid {
+  max-width: 1200px;
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 4rem;
+  margin-bottom: 3rem;
+}
+
+.footer-info p, .footer-mission p {
+  color: var(--text-muted);
+  font-size: 0.95rem;
+  margin-bottom: 1rem;
+}
+
+.disclaimer {
+  font-size: 0.8rem !important;
+  color: #666 !important;
+  border-top: 1px solid #333;
+  padding-top: 1rem;
+  margin-top: 1rem;
+}
+
+.footer-bottom {
+  max-width: 1200px;
+  margin: 0 auto;
+  text-align: center;
+  border-top: 1px solid #333;
+  padding-top: 2rem;
+  font-family: var(--font-heading);
+  letter-spacing: 0.1em;
+  font-size: 0.8rem;
+  color: #666;
+}
+
+/* ---------- Facility Images ---------- */
+.facility-image-wrapper {
+  margin-bottom: 2rem;
+  border: 1px solid var(--border-color);
+  background: var(--bg-panel-light);
+  padding: 0.5rem;
+  overflow: hidden;
+}
+
+.facility-image {
+  width: 100%;
+  height: auto;
+  display: block;
