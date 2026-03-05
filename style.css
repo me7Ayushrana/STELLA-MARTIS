@@ -568,5 +568,98 @@ a:hover {
   width: 100%;
   height: auto;
   display: block;
+  object-fit: cover;
+  max-height: 400px;
+  border: 1px solid rgba(255,255,255,0.05);
+}
 
-/* Force change iteration 11 */
+/* ============================================
+   ANIMATION UTILITIES 
+   ============================================ */
+.reveal {
+  opacity: 0;
+  transition: all 0.8s cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+
+/* Slide Up */
+.reveal.slide-up { transform: translateY(40px); }
+.reveal.slide-up.visible { opacity: 1; transform: translateY(0); }
+
+/* Fade In */
+.reveal.fade-in { transform: translateY(10px); }
+.reveal.fade-in.visible { opacity: 1; transform: translateY(0); }
+
+/* Scale In */
+.reveal.scale-in { transform: scale(0.95); }
+.reveal.scale-in.visible { opacity: 1; transform: scale(1); }
+
+/* Delays */
+.delay-1 { transition-delay: 0.1s; }
+.delay-2 { transition-delay: 0.2s; }
+.delay-3 { transition-delay: 0.3s; }
+.delay-4 { transition-delay: 0.4s; }
+
+/* Turn off delays on mobile to prevent staggered jank on single column */
+@media (max-width: 768px) {
+  .delay-1, .delay-2, .delay-3, .delay-4 {
+    transition-delay: 0s !important;
+  }
+}
+
+/* ============================================
+   RESPONSIVE DESIGN (SUPER MOBILE FRIENDLY)
+   ============================================ */
+
+@media (max-width: 992px) {
+  .grid-2, .specs-grid, .footer-grid {
+    grid-template-columns: 1fr;
+    gap: 1.5rem;
+  }
+  .process-steps {
+    grid-template-columns: 1fr 1fr;
+  }
+  .partner-item {
+    flex: 1 1 calc(50% - 1rem);
+  }
+}
+
+@media (max-width: 768px) {
+  .header {
+    padding: 1rem;
+  }
+  
+  .desktop-only-btn { display: none; }
+  .mobile-only-btn { 
+    display: block; 
+    margin-top: 1rem;
+  }
+  .mobile-only-btn .btn {
+    width: 100%;
+  }
+
+  .mobile-toggle {
+    display: flex;
+  }
+
+  /* Mobile Dropdown Menu */
+  .main-nav {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    width: 100%;
+    background: rgba(0, 0, 0, 0.98);
+    border-bottom: 1px solid var(--border-color);
+    padding: 0;
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.4s ease;
+  }
+
+  .main-nav.active {
+    max-height: 400px;
+    padding: 1rem 0 2rem;
+  }
+
+  .main-nav ul {
+    flex-direction: column;
+    gap: 0;

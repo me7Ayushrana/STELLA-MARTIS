@@ -310,3 +310,55 @@
             <label>SPITI TRAVEL (IF APPLICABLE)</label>
             <input type="text" name="spiti_team" placeholder="Team size if travelling to Spiti Valley">
           </div>
+          <button type="submit" class="btn btn-primary btn-block">SUBMIT CAMPAIGN BRIEF</button>
+        </form>
+      </div>
+    </section>
+
+    <!-- FOOTER -->
+    <footer class="site-footer">
+      <div class="footer-grid">
+        <div class="footer-info reveal fade-in">
+          <div class="logo-mark" style="font-size: 2rem; margin-bottom: 1rem;">SM</div>
+          <h4>STELLA MARTIS</h4>
+          <p>Private aerospace infrastructure and research company based in Chandigarh, India. Registered under IN-SPACe guidelines and operating under applicable research and safety standards.</p>
+          <p>Our team combines backgrounds in aerospace engineering, materials science, embedded systems, and planetary geology.</p>
+        </div>
+        <div class="footer-mission reveal fade-in delay-1">
+          <h4>OUR ORIGIN</h4>
+          <p>We built Stella Martis because the infrastructure didn't exist. India has the engineering talent and the institutional momentum to contribute seriously to Mars exploration. The missing piece was a place to test the hardware. We are building that place.</p>
+          <p class="disclaimer">All technical specifications subject to update as facilities expand. Current specs reflect Phase 1 operational status.</p>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <p>&copy; 2026 Stella Martis. All systems nominal.</p>
+      </div>
+    </footer>
+
+  </main>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js"></script>
+  <script src="supabase-config.js?v=2"></script>
+
+  <script>
+    // --- Mobile Menu Toggle ---
+    const mobileToggle = document.getElementById('mobile-toggle');
+    const mainNav = document.getElementById('main-nav');
+    const navLinks = document.querySelectorAll('.main-nav a');
+    const header = document.getElementById('header');
+
+    mobileToggle.addEventListener('click', () => {
+      mobileToggle.classList.toggle('active');
+      mainNav.classList.toggle('active');
+      header.classList.toggle('menu-open');
+    });
+
+    // Close menu when clicking a link
+    navLinks.forEach(link => {
+      link.addEventListener('click', () => {
+        mobileToggle.classList.remove('active');
+        mainNav.classList.remove('active');
+        header.classList.remove('menu-open');
+      });
+    });
+
