@@ -663,5 +663,98 @@ a:hover {
   .main-nav ul {
     flex-direction: column;
     gap: 0;
+  }
 
-/* Force change iteration 13 */
+  .main-nav li {
+    width: 100%;
+    text-align: center;
+  }
+
+  .main-nav a {
+    display: block;
+    padding: 1rem;
+    font-size: 1.1rem;
+    border-bottom: 1px solid rgba(255,255,255,0.05);
+  }
+  
+  .main-nav .mobile-only-btn a {
+    border-bottom: none;
+    padding: 1rem;
+    width: 90%;
+    margin: 0 auto;
+  }
+
+  .info-section {
+    padding: 3rem 1rem;
+  }
+
+  .hero-section {
+    padding: 1rem;
+  }
+
+  .hero-content {
+    padding: 2rem 1.5rem;
+    border-left-width: 3px;
+  }
+
+  .hero-desc {
+    font-size: 1rem;
+  }
+
+  .hero-actions .btn {
+    width: 100%;
+  }
+
+  .process-steps {
+    grid-template-columns: 1fr;
+  }
+
+  .partner-item {
+    flex: 1 1 100%;
+  }
+
+  .facility-panel {
+    padding: 1.5rem;
+  }
+
+  .facility-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.5rem;
+  }
+
+  .content-card {
+    padding: 1.5rem;
+  }
+
+  .agency-form .form-row {
+    grid-template-columns: 1fr;
+    gap: 0;
+  }
+  
+  .section-header h2 {
+    font-size: 1.8rem;
+  }
+  
+  .site-footer {
+    padding: 3rem 1.5rem 1.5rem;
+  }
+}
+
+@media (max-width: 480px) {
+  html {
+    font-size: 14px;
+  }
+  
+  .logo-mark {
+    font-size: 1.5rem;
+  }
+  .logo-text {
+    font-size: 1rem;
+  }
+  
+  .hero-content h1 {
+    font-size: 2.2rem;
+  }
+  
+  .info-section {
