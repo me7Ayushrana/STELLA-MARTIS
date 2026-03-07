@@ -414,3 +414,55 @@
         organization: e.target.organization.value,
         email: e.target.email.value,
         hardware: e.target.hardware.value,
+        conditions: e.target.conditions.value || null,
+        timeline: e.target.timeline.value || null,
+        deliverables: e.target.deliverables.value || null,
+        spiti_team: e.target.spiti_team.value || null,
+      };
+
+      btn.textContent = 'TRANSMITTING...';
+      btn.disabled = true;
+
+      // Inline robust initialization of Supabase client to prevent any script load failures
+      const SUPABASE_URL = "https://sfjjgsuchsfsohzqrojr.supabase.co";
+      const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InNmampnc3VjaHNmc29oenFyb2pyIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODAzNjgwODYsImV4cCI6MjA5NTk0NDA4Nn0.BGhYAJX8VlKUaYbtSiROBQevoeumLtcqnzZUrIicVPg";
+      
+      let client = null;
+      try {
+        if (typeof window.supabase !== 'undefined' && window.supabase) {
+          client = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+        } else if (typeof supabase !== 'undefined' && supabase) {
+          client = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+        }
+      } catch (err) {
+        console.error("Supabase client failed to initialize inline:", err);
+      }
+
+      if (client) {
+        try {
+          const { error } = await client
+            .from('campaign_requests')
+            .insert([formData]);
+
+          if (error) throw error;
+
+          btn.textContent = 'BRIEF RECEIVED';
+          btn.style.backgroundColor = '#2e7d32';
+        } catch (error) {
+          console.error("Supabase Submission Error:", error);
+          btn.textContent = 'TRANSMISSION ERROR';
+          btn.style.backgroundColor = '#d32f2f';
+          alert("Error sending campaign brief: " + error.message);
+        }
+      } else {
+        // Fallback for demo when Supabase is not loaded yet
+        console.warn("Supabase SDK is not loaded. Running offline simulation demo.");
+        setTimeout(() => {
+          btn.textContent = 'DEMO RECEIVED (OFFLINE)';
+          btn.style.backgroundColor = '#2e7d32';
+        }, 1200);
+      }
+
+      setTimeout(() => {
+        btn.textContent = originalText;
+        btn.style.backgroundColor = '';
