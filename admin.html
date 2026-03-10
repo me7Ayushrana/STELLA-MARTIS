@@ -58,3 +58,63 @@
           </div>
           <div id="login-error-msg" style="color:var(--error); font-family:var(--font-mono); font-size:0.8rem; margin-top:1rem; text-align:center; display:none;"></div>
           <button type="submit" class="btn btn-primary btn-block" id="btn-login-submit">ESTABLISH LINK</button>
+        </form>
+        
+        <div class="login-help">
+          <p><strong>Note:</strong> Create admin accounts in your Supabase Auth Dashboard. If you haven't set up Supabase yet, click <strong>DB CONFIG</strong> in the top right to link your database instantly.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- 2. DASHBOARD SCREEN (AUTHENTICATED) -->
+    <section class="dashboard-section" id="dashboard-panel" style="display: none;">
+      
+      <!-- Metrics Overview -->
+      <div class="admin-metrics-grid">
+        <div class="metric-card border-top-accent">
+          <div class="metric-label">TOTAL CAMPAIGNS</div>
+          <div class="metric-value" id="stat-total">0</div>
+        </div>
+        <div class="metric-card border-top-accent">
+          <div class="metric-label">PENDING REVIEW</div>
+          <div class="metric-value warning" id="stat-pending">0</div>
+        </div>
+        <div class="metric-card border-top-accent">
+          <div class="metric-label">IN SIMULATION</div>
+          <div class="metric-value active" id="stat-active">0</div>
+        </div>
+        <div class="metric-card border-top-accent">
+          <div class="metric-label">COMPLETED & ARCHIVED</div>
+          <div class="metric-value success" id="stat-completed">0</div>
+        </div>
+      </div>
+
+      <!-- Controls & List Table -->
+      <div class="content-card admin-main-card">
+        <div class="admin-card-header">
+          <h3>CAMPAIGN QUALIFICATION REQUESTS</h3>
+          
+          <div class="admin-controls">
+            <!-- Search -->
+            <div class="search-box">
+              <input type="text" id="search-org" placeholder="Filter by Organization...">
+            </div>
+            <!-- Filter Tabs -->
+            <div class="filter-tabs">
+              <button class="filter-tab active" data-filter="all">ALL</button>
+              <button class="filter-tab" data-filter="Pending">PENDING</button>
+              <button class="filter-tab" data-filter="In Progress">IN PROGRESS</button>
+              <button class="filter-tab" data-filter="Completed">COMPLETED</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Data List -->
+        <div class="table-container">
+          <table class="admin-table">
+            <thead>
+              <tr>
+                <th>SUBMISSION TIME</th>
+                <th>ORGANIZATION</th>
+                <th>CONTACT EMAIL</th>
+                <th>DELIVERABLES</th>
