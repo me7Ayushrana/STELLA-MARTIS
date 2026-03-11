@@ -1,0 +1,133 @@
+/* ==========================================================================
+   STELLA MARTIS — ADMIN TELEMETRY DASHBOARD STYLING
+   ========================================================================== */
+
+/* Variables / Themes */
+:root {
+  --success: #2ecc71;
+  --success-glow: rgba(46, 204, 113, 0.35);
+  --warning: #f39c12;
+  --warning-glow: rgba(243, 156, 18, 0.35);
+  --info: #3498db;
+  --info-glow: rgba(52, 152, 219, 0.35);
+  --error: #e74c3c;
+  --error-glow: rgba(231, 76, 60, 0.35);
+  --border-color: rgba(255, 255, 255, 0.08);
+  --bg-panel: rgba(10, 10, 15, 0.85);
+  --font-mono: 'Share Tech Mono', 'Courier New', monospace;
+}
+
+.admin-body {
+  background-color: #040408;
+  color: #f5f5f7;
+  overflow-x: hidden;
+  font-family: 'Roboto', sans-serif;
+}
+
+/* Telemetry retro-futuristic grid overlay */
+.telemetry-grid-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background-image: 
+    linear-gradient(to right, rgba(216, 92, 50, 0.03) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(216, 92, 50, 0.03) 1px, transparent 1px);
+  background-size: 40px 40px;
+  z-index: -1;
+  pointer-events: none;
+}
+
+/* Header Adjustments */
+.admin-header {
+  border-bottom: 1px solid var(--border-color);
+  background: rgba(4, 4, 8, 0.9);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+}
+
+.admin-user-badge {
+  font-family: var(--font-mono);
+  background: rgba(216, 92, 50, 0.1);
+  border: 1px solid rgba(216, 92, 50, 0.3);
+  padding: 0.35rem 0.75rem;
+  border-radius: 4px;
+  font-size: 0.8rem;
+  color: var(--mars-orange);
+  letter-spacing: 0.05em;
+  display: inline-block;
+  margin-right: 1rem;
+}
+
+.btn-sm {
+  padding: 0.35rem 0.8rem;
+  font-size: 0.75rem;
+  letter-spacing: 0.1em;
+}
+
+.admin-container {
+  padding-top: 8rem;
+  min-height: 100vh;
+}
+
+/* ==========================================
+   1. AUTH SECTION
+   ========================================== */
+.auth-section {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: calc(80vh - 80px);
+}
+
+.login-card {
+  width: 100%;
+  max-width: 450px;
+  background: var(--bg-panel);
+  border: 1px solid var(--border-color);
+  padding: 3rem;
+  border-top: 4px solid var(--accent);
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.7);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border-radius: 4px;
+}
+
+.login-intro {
+  color: var(--text-muted);
+  font-size: 0.9rem;
+  margin-bottom: 2rem;
+  line-height: 1.5;
+}
+
+.login-help {
+  margin-top: 2rem;
+  padding-top: 1.5rem;
+  border-top: 1px dashed var(--border-color);
+  font-size: 0.75rem;
+  color: var(--text-muted);
+  line-height: 1.6;
+}
+
+/* ==========================================
+   2. DASHBOARD / METRICS
+   ========================================== */
+.dashboard-section {
+  display: flex;
+  flex-direction: column;
+  gap: 2.5rem;
+  animation: fadeIn 0.4s ease-out;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.admin-metrics-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 1.5rem;
+}
+

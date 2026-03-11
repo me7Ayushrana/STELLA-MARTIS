@@ -118,3 +118,63 @@
                 <th>ORGANIZATION</th>
                 <th>CONTACT EMAIL</th>
                 <th>DELIVERABLES</th>
+                <th>STATUS</th>
+                <th>ACTION</th>
+              </tr>
+            </thead>
+            <tbody id="requests-list">
+              <tr>
+                <td colspan="6" class="table-empty">Connecting telemetry datalink...</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- 3. DETAILS DRAWER / MODAL -->
+  <div class="modal-backdrop" id="details-modal" style="display: none;">
+    <div class="modal-card content-card border-top-accent">
+      <div class="modal-header">
+        <h3 id="detail-org-title">ORGANIZATION BRIEF</h3>
+        <button class="modal-close" id="btn-close-details">&times;</button>
+      </div>
+      <div class="divider"></div>
+      
+      <div class="modal-body">
+        <div class="detail-grid">
+          <div class="detail-item">
+            <span class="detail-label">CONTACT EMAIL</span>
+            <span class="detail-value" id="detail-email">-</span>
+          </div>
+          <div class="detail-item">
+            <span class="detail-label">SUBMITTED ON</span>
+            <span class="detail-value" id="detail-date">-</span>
+          </div>
+          <div class="detail-item full-width">
+            <span class="detail-label">HARDWARE SPECS & DESCRIPTION</span>
+            <div class="detail-box" id="detail-hardware">-</div>
+          </div>
+          <div class="detail-item">
+            <span class="detail-label">CRITICAL CONDITIONS</span>
+            <span class="detail-value" id="detail-conditions">-</span>
+          </div>
+          <div class="detail-item">
+            <span class="detail-label">PREFERRED TIMELINE</span>
+            <span class="detail-value" id="detail-timeline">-</span>
+          </div>
+          <div class="detail-item">
+            <span class="detail-label">SPITI VALLEY EXPEDITION</span>
+            <span class="detail-value" id="detail-spiti">-</span>
+          </div>
+          <div class="detail-item">
+            <span class="detail-label">DELIVERABLES REQUIRED</span>
+            <span class="detail-value" id="detail-deliverables">-</span>
+          </div>
+        </div>
+
+        <div class="divider" style="margin-top: 2rem;"></div>
+
+        <!-- ADMIN CONTROLS FORM -->
