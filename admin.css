@@ -264,3 +264,136 @@
   background: var(--accent);
   color: #fff;
 }
+
+/* Responsive Table */
+.table-container {
+  overflow-x: auto;
+  width: 100%;
+}
+
+.admin-table {
+  width: 100%;
+  border-collapse: collapse;
+  text-align: left;
+  font-size: 0.9rem;
+}
+
+.admin-table th, 
+.admin-table td {
+  padding: 1rem 1.25rem;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.04);
+}
+
+.admin-table th {
+  font-family: var(--font-heading);
+  font-size: 0.75rem;
+  letter-spacing: 0.15em;
+  color: var(--text-muted);
+  background: rgba(255, 255, 255, 0.02);
+  text-transform: uppercase;
+}
+
+.admin-table tbody tr {
+  transition: background-color 0.15s ease;
+}
+
+.admin-table tbody tr:hover {
+  background: rgba(216, 92, 50, 0.03);
+}
+
+.table-empty {
+  text-align: center;
+  padding: 3rem !important;
+  color: var(--text-muted);
+  font-family: var(--font-mono);
+  letter-spacing: 0.05em;
+}
+
+.time-mono {
+  font-family: var(--font-mono);
+  font-size: 0.8rem;
+  color: #bbb;
+}
+
+/* Status Badges */
+.badge {
+  font-family: var(--font-mono);
+  font-size: 0.7rem;
+  font-weight: 600;
+  letter-spacing: 0.05em;
+  padding: 0.25rem 0.6rem;
+  border-radius: 2px;
+  display: inline-block;
+  text-transform: uppercase;
+  border: 1px solid transparent;
+}
+
+.badge-pending {
+  background: rgba(243, 156, 18, 0.1);
+  border-color: rgba(243, 156, 18, 0.3);
+  color: var(--warning);
+}
+
+.badge-progress {
+  background: rgba(52, 152, 219, 0.1);
+  border-color: rgba(52, 152, 219, 0.3);
+  color: var(--info);
+}
+
+.badge-completed {
+  background: rgba(46, 204, 113, 0.1);
+  border-color: rgba(46, 204, 113, 0.3);
+  color: var(--success);
+}
+
+.badge-cancelled {
+  background: rgba(231, 76, 60, 0.1);
+  border-color: rgba(231, 76, 60, 0.3);
+  color: var(--error);
+}
+
+/* Action button in table */
+.btn-view {
+  font-family: var(--font-mono);
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  color: #fff;
+  padding: 0.3rem 0.75rem;
+  font-size: 0.75rem;
+  cursor: pointer;
+  border-radius: 2px;
+  transition: background-color 0.2s, border-color 0.2s;
+}
+
+.btn-view:hover {
+  background: var(--accent);
+  border-color: var(--accent);
+}
+
+/* ==========================================
+   4. MODALS & FORMS
+   ========================================== */
+.modal-backdrop {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: rgba(0, 0, 0, 0.75);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  z-index: 1000;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  animation: fadeIn 0.25s ease;
+  padding: 1.5rem;
+}
+
+.modal-card {
+  width: 100%;
+  max-width: 750px;
+  background: #0d0d12;
+  box-shadow: 0 30px 70px rgba(0, 0, 0, 0.9);
+  max-height: calc(100vh - 3rem);
+  overflow-y: auto;
