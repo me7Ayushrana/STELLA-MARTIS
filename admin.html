@@ -178,3 +178,63 @@
         <div class="divider" style="margin-top: 2rem;"></div>
 
         <!-- ADMIN CONTROLS FORM -->
+        <form id="update-request-form">
+          <input type="hidden" id="update-id">
+          
+          <div class="form-row">
+            <div class="form-group">
+              <label>CAMPAIGN STATUS</label>
+              <select id="update-status" class="admin-select">
+                <option value="Pending">Pending Review</option>
+                <option value="In Progress">In Progress</option>
+                <option value="Completed">Completed</option>
+                <option value="Cancelled">Cancelled</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label>TECHNICAL REPORT LINK (URL)</label>
+              <input type="url" id="update-report" placeholder="https://drive.google.com/..." class="admin-input">
+            </div>
+          </div>
+          <div class="form-row" style="margin-top: 1.5rem;">
+            <button type="submit" class="btn btn-primary" style="margin-top: 0;">COMMIT STATUS UPDATE</button>
+            <button type="button" class="btn btn-secondary" id="btn-delete-request" style="background-color: #c62828; border-color: #c62828; color: #fff; margin-top: 0;">DELETE REQUEST</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <!-- 4. SUPABASE CREDENTIALS CONFIG MODAL -->
+  <div class="modal-backdrop" id="settings-modal" style="display: none;">
+    <div class="modal-card content-card" style="max-width: 500px;">
+      <div class="modal-header">
+        <h3>SUPABASE CONFIGURATION</h3>
+        <button class="modal-close" id="btn-close-settings">&times;</button>
+      </div>
+      <div class="divider"></div>
+      
+      <p class="settings-desc">To deploy and run in production, edit credentials inside your local `supabase-config.js` file. For quick in-browser testing, you can input your credentials below, and they will persist locally in your browser session.</p>
+      
+      <form id="settings-form">
+        <div class="form-group">
+          <label>SUPABASE URL</label>
+          <input type="url" id="config-url" placeholder="https://your-project-id.supabase.co" required>
+        </div>
+        <div class="form-group">
+          <label>PUBLIC ANON KEY</label>
+          <input type="text" id="config-key" placeholder="eyJhbGciOiJIUzI1Ni..." required>
+        </div>
+        <div class="form-row">
+          <button type="button" class="btn btn-secondary" id="btn-clear-config">CLEAR OVERRIDE</button>
+          <button type="submit" class="btn btn-primary">SAVE OVERRIDE</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js"></script>
+  <script src="supabase-config.js?v=2"></script>
+  <script src="admin.js"></script>
+</body>
+</html>
