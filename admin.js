@@ -117,3 +117,122 @@ document.addEventListener("DOMContentLoaded", () => {
     // Listen to Supabase Auth state changes
     supabase.auth.onAuthStateChange((event, session) => {
       if (session) {
+        // Authenticated State
+        authPanel.style.display = "none";
+        dashboardPanel.style.display = "block";
+        authHeaderActions.style.display = "flex";
+        adminUserEmail.textContent = session.user.email;
+        loadCampaignData();
+      } else {
+        // Unauthenticated State
+        authPanel.style.display = "flex";
+        dashboardPanel.style.display = "none";
+        authHeaderActions.style.display = "none";
+      }
+    });
+
+    // Login Form Submit
+    loginForm.addEventListener("submit", async (e) => {
+      e.preventDefault();
+      const loginErrorMsg = document.getElementById("login-error-msg");
+      if (loginErrorMsg) {
+        loginErrorMsg.style.display = "none";
+        loginErrorMsg.textContent = "";
+      }
+      btnLoginSubmit.textContent = "ESTABLISHING LINK...";
+      btnLoginSubmit.disabled = true;
+
+      try {
+        const { data, error } = await supabase.auth.signInWithPassword({
+          email: loginEmail.value.trim(),
+          password: loginPassword.value,
+        });
+
+        if (error) throw error;
+      } catch (err) {
+        console.error("Login Failed:", err);
+        if (loginErrorMsg) {
+          loginErrorMsg.textContent = `ERROR: ${err.message.toUpperCase()}`;
+          loginErrorMsg.style.display = "block";
+        } else {
+          alert("Authentication Error: " + err.message);
+        }
+      } finally {
+        btnLoginSubmit.textContent = "ESTABLISH LINK";
+        btnLoginSubmit.disabled = false;
+      }
+    });
+
+    // Logout Action
+    btnLogout.addEventListener("click", async () => {
+      await supabase.auth.signOut();
+      window.location.reload();
+    });
+
+  } else {
+    // Fallback/Demo Mock UI when Supabase URL/Key placeholders are not configured yet
+    console.warn("Supabase is offline or not configured. Starting in simulated mode.");
+    
+    // Simulate dynamic login for frontend testing without DB
+    loginForm.addEventListener("submit", (e) => {
+      e.preventDefault();
+      btnLoginSubmit.textContent = "ESTABLISHING MOCK LINK...";
+      btnLoginSubmit.disabled = true;
+
+      setTimeout(() => {
+        authPanel.style.display = "none";
+        dashboardPanel.style.display = "block";
+        authHeaderActions.style.display = "flex";
+        adminUserEmail.textContent = "demo-admin@stellamartis.in";
+        loadMockCampaignData();
+      }, 1000);
+    });
+
+    btnLogout.addEventListener("click", () => {
+      window.location.reload();
+    });
+  }
+
+  // 3. DATA FETCHING & COMPUTATION
+  async function loadCampaignData() {
+    try {
+      requestsList.innerHTML = `<tr><td colspan="6" class="table-empty">Reading campaigns datastream...</td></tr>`;
+      
+      const { data, error } = await supabase
+        .from("campaign_requests")
+        .select("*")
+        .order("created_at", { ascending: false });
+
+      if (error) throw error;
+
+      campaignRequests = data || [];
+      computeMetrics();
+      renderRequestsTable();
+    } catch (err) {
+      console.error("Fetch Campaigns Error:", err);
+      requestsList.innerHTML = `<tr><td colspan="6" class="table-empty" style="color:var(--error);">Failed to fetch datastream: ${err.message}</td></tr>`;
+    }
+  }
+
+  // Fallback static mock data for demo
+  function loadMockCampaignData() {
+    campaignRequests = [
+      {
+        id: "mock-1",
+        created_at: new Date(Date.now() - 3600000 * 3).toISOString(),
+        organization: "ISRO Space Applications Centre",
+        email: "rover-autonomy@sac.isro.gov.in",
+        hardware: "Autonomy navigation payload & stereo camera rig. Weighs 12kg.",
+        conditions: "10-20 min comms delay, loose regolith sand gradient up to 25 degrees.",
+        timeline: "Q4 2026",
+        deliverables: "report_and_data",
+        spiti_team: "5 team members",
+        status: "Pending",
+        report_url: null
+      },
+      {
+        id: "mock-2",
+        created_at: new Date(Date.now() - 3600000 * 24).toISOString(),
+        organization: "IIT Ropar Geology Team",
+        email: "geochemistry@iitrpr.ac.in",
+        hardware: "X-ray fluorescence spectrometer & planetary core drill bits.",
