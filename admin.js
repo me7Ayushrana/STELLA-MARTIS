@@ -236,3 +236,122 @@ document.addEventListener("DOMContentLoaded", () => {
         organization: "IIT Ropar Geology Team",
         email: "geochemistry@iitrpr.ac.in",
         hardware: "X-ray fluorescence spectrometer & planetary core drill bits.",
+        conditions: "Mohali indoor vacuum down to 0.05 atm, Mars regolith simulant bed, UV radiation.",
+        timeline: "Immediate",
+        deliverables: "report_and_data",
+        spiti_team: "None (Mohali indoor)",
+        status: "In Progress",
+        report_url: null
+      },
+      {
+        id: "mock-3",
+        created_at: new Date(Date.now() - 3600000 * 48 * 2).toISOString(),
+        organization: "Valles-X Aerospace",
+        email: "missions@vallesx.com",
+        hardware: "Carbon fiber solar cells, rotor blades, and flight computer of a Mars analog drone.",
+        conditions: "Spiti high altitude low pressure (0.55 atm), cold desert climate.",
+        timeline: "June 2026",
+        deliverables: "raw_data_only",
+        spiti_team: "3 members for deployment",
+        status: "Completed",
+        report_url: "https://drive.google.com/file/d/demo-report/view"
+      }
+    ];
+    computeMetrics();
+    renderRequestsTable();
+  }
+
+  // 4. METRICS / STATS COMPUTATION
+  function computeMetrics() {
+    statTotal.textContent = campaignRequests.length;
+    statPending.textContent = campaignRequests.filter(r => r.status === "Pending").length;
+    statActive.textContent = campaignRequests.filter(r => r.status === "In Progress").length;
+    statCompleted.textContent = campaignRequests.filter(r => r.status === "Completed").length;
+  }
+
+  // 5. TABLE RENDER CONTROLLER
+  function renderRequestsTable() {
+    // Apply filters
+    let filtered = campaignRequests;
+
+    if (currentFilter !== "all") {
+      filtered = filtered.filter(r => r.status === currentFilter);
+    }
+
+    if (searchQuery) {
+      filtered = filtered.filter(r => 
+        r.organization.toLowerCase().includes(searchQuery) ||
+        r.email.toLowerCase().includes(searchQuery)
+      );
+    }
+
+    if (filtered.length === 0) {
+      requestsList.innerHTML = `<tr><td colspan="6" class="table-empty">No matching telemetry logs found.</td></tr>`;
+      return;
+    }
+
+    requestsList.innerHTML = filtered.map(r => {
+      const dateStr = new Date(r.created_at).toLocaleString('en-IN', {
+        day: '2-digit',
+        month: 'short',
+        hour: '2-digit',
+        minute: '2-digit'
+      });
+
+      let statusBadge = "badge-pending";
+      if (r.status === "In Progress") statusBadge = "badge-progress";
+      else if (r.status === "Completed") statusBadge = "badge-completed";
+      else if (r.status === "Cancelled") statusBadge = "badge-cancelled";
+
+      const deliverableText = r.deliverables === "report_and_data" ? "Report + Data" : "Raw Data";
+
+      return `
+        <tr>
+          <td class="time-mono">${dateStr}</td>
+          <td><strong>${escapeHtml(r.organization)}</strong></td>
+          <td class="time-mono">${escapeHtml(r.email)}</td>
+          <td>${deliverableText}</td>
+          <td><span class="badge ${statusBadge}">${r.status}</span></td>
+          <td><button class="btn-view" data-id="${r.id}">VIEW</button></td>
+        </tr>
+      `;
+    }).join('');
+
+    // Rebind action buttons
+    document.querySelectorAll(".btn-view").forEach(btn => {
+      btn.addEventListener("click", () => {
+        const id = btn.getAttribute("data-id");
+        showRequestDetails(id);
+      });
+    });
+  }
+
+  // HTML escaping helper
+  function escapeHtml(str) {
+    if (!str) return '';
+    return str
+      .replace(/&/g, "&amp;")
+      .replace(/</g, "&lt;")
+      .replace(/>/g, "&gt;")
+      .replace(/"/g, "&quot;")
+      .replace(/'/g, "&#039;");
+  }
+
+  // 6. FILTER & SEARCH BINDINGS
+  searchOrg.addEventListener("input", (e) => {
+    searchQuery = e.target.value.toLowerCase().trim();
+    renderRequestsTable();
+  });
+
+  filterTabs.forEach(tab => {
+    tab.addEventListener("click", () => {
+      filterTabs.forEach(t => t.classList.remove("active"));
+      tab.classList.add("active");
+      currentFilter = tab.getAttribute("data-filter");
+      renderRequestsTable();
+    });
+  });
+
+  // 7. MODAL DRAWER HANDLING (VIEW & EDIT)
+  function showRequestDetails(id) {
+    const req = campaignRequests.find(r => r.id === id);
