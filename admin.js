@@ -355,3 +355,122 @@ document.addEventListener("DOMContentLoaded", () => {
   // 7. MODAL DRAWER HANDLING (VIEW & EDIT)
   function showRequestDetails(id) {
     const req = campaignRequests.find(r => r.id === id);
+    if (!req) return;
+
+    // Fill fields
+    updateId.value = req.id;
+    detailOrgTitle.textContent = req.organization;
+    detailEmail.textContent = req.email;
+    detailDate.textContent = new Date(req.created_at).toLocaleString();
+    detailHardware.textContent = req.hardware;
+    detailConditions.textContent = req.conditions || "None specified";
+    detailTimeline.textContent = req.timeline || "Not specified";
+    detailSpiti.textContent = req.spiti_team || "Not applicable";
+    detailDeliverables.textContent = req.deliverables === "report_and_data" ? "Research Report & Raw Data" : "Raw Data Only";
+
+    updateStatus.value = req.status;
+    updateReport.value = req.report_url || "";
+
+    detailsModal.style.display = "flex";
+  }
+
+  btnCloseDetails.addEventListener("click", () => {
+    detailsModal.style.display = "none";
+  });
+
+  // Submit Detail updates
+  updateRequestForm.addEventListener("submit", async (e) => {
+    e.preventDefault();
+    const id = updateId.value;
+    const status = updateStatus.value;
+    const report_url = updateReport.value.trim() || null;
+
+    const btnSubmit = updateRequestForm.querySelector("button[type='submit']");
+    const originalText = btnSubmit.textContent;
+    btnSubmit.textContent = "SAVING TELEMETRY STATE...";
+    btnSubmit.disabled = true;
+
+    if (isSupabaseConfigured()) {
+      try {
+        const { error } = await supabase
+          .from("campaign_requests")
+          .update({ status, report_url })
+          .eq("id", id);
+
+        if (error) throw error;
+
+        // Success: reload
+        detailsModal.style.display = "none";
+        alert("Campaign details successfully updated!");
+        loadCampaignData();
+      } catch (err) {
+        console.error("Update Error:", err);
+        alert("Failed to save changes: " + err.message);
+      } finally {
+        btnSubmit.textContent = originalText;
+        btnSubmit.disabled = false;
+      }
+    } else {
+      // Offline Simulated update fallback
+      setTimeout(() => {
+        const idx = campaignRequests.findIndex(r => r.id === id);
+        if (idx !== -1) {
+          campaignRequests[idx].status = status;
+          campaignRequests[idx].report_url = report_url;
+        }
+        computeMetrics();
+        renderRequestsTable();
+        detailsModal.style.display = "none";
+        alert("Simulation telemetry state updated successfully (Offline Demo)!");
+        btnSubmit.textContent = originalText;
+        btnSubmit.disabled = false;
+      }, 1000);
+    }
+  });
+
+  // Handle Delete Request Action
+  if (btnDeleteRequest) {
+    btnDeleteRequest.addEventListener("click", async () => {
+      const id = updateId.value;
+      const orgName = detailOrgTitle.textContent;
+      
+      if (!confirm(`Are you absolutely sure you want to permanently delete the campaign request from "${orgName}"? This action cannot be undone.`)) {
+        return;
+      }
+
+      const originalText = btnDeleteRequest.textContent;
+      btnDeleteRequest.textContent = "DELETING...";
+      btnDeleteRequest.disabled = true;
+
+      if (isSupabaseConfigured()) {
+        try {
+          const { error } = await supabase
+            .from("campaign_requests")
+            .delete()
+            .eq("id", id);
+
+          if (error) throw error;
+
+          detailsModal.style.display = "none";
+          alert("Campaign request successfully deleted!");
+          loadCampaignData();
+        } catch (err) {
+          console.error("Delete Error:", err);
+          alert("Failed to delete request: " + err.message);
+        } finally {
+          btnDeleteRequest.textContent = originalText;
+          btnDeleteRequest.disabled = false;
+        }
+      } else {
+        // Offline Simulated delete fallback
+        setTimeout(() => {
+          campaignRequests = campaignRequests.filter(r => r.id !== id);
+          computeMetrics();
+          renderRequestsTable();
+          detailsModal.style.display = "none";
+          alert("Simulation telemetry state deleted successfully (Offline Demo)!");
+          btnDeleteRequest.textContent = originalText;
+          btnDeleteRequest.disabled = false;
+        }, 1000);
+      }
+    });
