@@ -758,5 +758,6 @@ a:hover {
   }
   
   .info-section {
-
-/* Force change iteration 49 */
+    padding: 2.5rem 1rem;
+  }
+}
