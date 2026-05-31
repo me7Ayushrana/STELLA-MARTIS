@@ -24,6 +24,11 @@
   box-sizing: border-box;
 }
 
+*:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 4px;
+}
+
 html {
   scroll-behavior: smooth;
   font-size: 16px;
@@ -49,7 +54,54 @@ body {
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
-  z-index: -1;
+  z-index: -3; /* fallback behind the 3D space canvas */
+}
+
+/* ---------- 3D Space Background Canvas ---------- */
+#space-canvas {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  z-index: -2;
+  pointer-events: none; /* ensure page clicks go through to links */
+  display: block;
+}
+
+/* ---------- Telemetry Preloader ---------- */
+#preloader {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: #050510;
+  z-index: 9999;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  transition: opacity 0.6s ease, visibility 0.6s ease;
+}
+
+.loader-content {
+  text-align: center;
+}
+
+.loader-spinner {
+  width: 60px;
+  height: 60px;
+  border: 4px solid rgba(216, 92, 50, 0.1);
+  border-top-color: var(--mars-orange);
+  border-radius: 50%;
+  animation: telemetry-spin 1.2s cubic-bezier(0.5, 0, 0.5, 1) infinite;
+  margin: 0 auto 1.5rem;
+  box-shadow: 0 0 15px rgba(216, 92, 50, 0.2);
+}
+
+@keyframes telemetry-spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
 }
 
 .bg-image::after {
@@ -274,9 +326,18 @@ a:hover {
 }
 
 .content-card {
-  background: var(--bg-panel);
+  background: rgba(15, 15, 20, 0.75);
+  backdrop-filter: blur(12px) saturate(180%);
+  -webkit-backdrop-filter: blur(12px) saturate(180%);
   padding: 2.5rem;
-  border: 1px solid var(--border-color);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 4px;
+  transition: border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.content-card:hover {
+  border-color: rgba(216, 92, 50, 0.3);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5), 0 0 20px rgba(216, 92, 50, 0.05);
 }
 
 .border-top-accent {
@@ -284,14 +345,19 @@ a:hover {
 }
 
 .content-box {
-  background: var(--bg-panel-light);
+  background: rgba(30, 30, 35, 0.75);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
   padding: 1.5rem;
-  border: 1px solid var(--border-color);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  border-radius: 4px;
 }
 
 .accent-box {
-  background: rgba(252, 61, 33, 0.1);
-  border-color: var(--accent);
+  background: rgba(252, 61, 33, 0.08);
+  border-color: rgba(252, 61, 33, 0.4);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
 }
 
 .bullet-list {
@@ -351,10 +417,19 @@ a:hover {
 
 /* ---------- Facilities ---------- */
 .facility-panel {
-  background: var(--bg-panel);
-  border: 1px solid var(--border-color);
+  background: rgba(15, 15, 20, 0.75);
+  backdrop-filter: blur(12px) saturate(180%);
+  -webkit-backdrop-filter: blur(12px) saturate(180%);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 4px;
   padding: 2.5rem;
   margin-bottom: 3rem;
+  transition: border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.facility-panel:hover {
+  border-color: rgba(216, 92, 50, 0.3);
+  box-shadow: 0 15px 40px rgba(0, 0, 0, 0.6), 0 0 30px rgba(216, 92, 50, 0.05);
 }
 
 .facility-header {

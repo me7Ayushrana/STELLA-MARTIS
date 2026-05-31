@@ -495,27 +495,30 @@
   });
 
   // ── Navigation ──
-  const nav = document.querySelector('.nav');
-  const navToggle = document.querySelector('.nav-toggle');
-  const navLinks = document.querySelector('.nav-links');
-  const navLinksItems = document.querySelectorAll('.nav-links a:not(.nav-cta)');
+  const nav = document.getElementById('header');
+  const navToggle = document.getElementById('mobile-toggle');
+  const navLinks = document.getElementById('main-nav');
+  const navLinksItems = document.querySelectorAll('.main-nav a');
 
-  // Scroll class
+  // Scroll class for header (opacity styling)
   function updateNav() {
-    if (window.scrollY > 60) {
-      nav.classList.add('scrolled');
-    } else {
-      nav.classList.remove('scrolled');
+    if (nav) {
+      if (window.scrollY > 60) {
+        nav.classList.add('scrolled');
+      } else {
+        nav.classList.remove('scrolled');
+      }
     }
   }
   window.addEventListener('scroll', updateNav, { passive: true });
   updateNav();
 
   // Mobile toggle
-  if (navToggle) {
+  if (navToggle && navLinks && nav) {
     navToggle.addEventListener('click', () => {
       navToggle.classList.toggle('active');
-      navLinks.classList.toggle('open');
+      navLinks.classList.toggle('active');
+      nav.classList.toggle('menu-open');
     });
   }
 
@@ -525,10 +528,19 @@
       const target = document.querySelector(link.getAttribute('href'));
       if (target) {
         e.preventDefault();
-        target.scrollIntoView({ behavior: 'smooth' });
+        const headerOffset = 80;
+        const elementPosition = target.getBoundingClientRect().top;
+        const offsetPosition = elementPosition + window.pageYOffset - headerOffset;
+        
+        window.scrollTo({
+          top: offsetPosition,
+          behavior: "smooth"
+        });
+
         // Close mobile menu
         navToggle?.classList.remove('active');
-        navLinks?.classList.remove('open');
+        navLinks?.classList.remove('active');
+        nav?.classList.remove('menu-open');
       }
     });
   });
@@ -541,7 +553,7 @@
       const top = section.offsetTop;
       const height = section.offsetHeight;
       const id = section.getAttribute('id');
-      const link = document.querySelector(`.nav-links a[href="#${id}"]`);
+      const link = document.querySelector(`.main-nav a[href="#${id}"]`);
       if (link) {
         if (scrollPos >= top && scrollPos < top + height) {
           link.classList.add('active');
@@ -570,23 +582,24 @@
   revealElements.forEach((el) => revealObserver.observe(el));
 
   // ── Form Handling ──
-  const form = document.getElementById('campaign-form');
+  const form = document.querySelector('.agency-form');
   if (form) {
     form.addEventListener('submit', (e) => {
       e.preventDefault();
-      const btn = form.querySelector('.btn-submit');
+      const btn = form.querySelector('button[type="submit"]');
       const originalText = btn.textContent;
-      btn.textContent = 'SENDING...';
+      btn.textContent = 'TRANSMITTING...';
       btn.style.opacity = '0.6';
 
       setTimeout(() => {
-        btn.textContent = '✓ SUBMITTED';
-        btn.style.background = 'linear-gradient(135deg, #2ecc71, #27ae60)';
+        btn.textContent = 'BRIEF RECEIVED';
+        btn.style.backgroundColor = '#2e7d32';
         btn.style.opacity = '1';
 
         setTimeout(() => {
           btn.textContent = originalText;
-          btn.style.background = '';
+          btn.style.backgroundColor = '';
+          btn.style.opacity = '1';
           form.reset();
         }, 3000);
       }, 1500);
