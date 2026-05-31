@@ -1,12 +1,11 @@
-/* ============================================
-   STELLA MARTIS — Three.js 3D Space Background
-   + Scroll Animations + Navigation
-   ============================================ */
+/*
+ * Stella Martis — WebGL Space Simulation & Telemetry System
+ * Procedural planetary rendering and scroll-guided camera parallax.
+ */
 
 (function () {
   'use strict';
 
-  // ── Three.js Scene Setup ──
   const canvas = document.getElementById('space-canvas');
   const scene = new THREE.Scene();
   const camera = new THREE.PerspectiveCamera(
@@ -26,7 +25,6 @@
   renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
   renderer.setClearColor(0x050510, 1);
 
-  // ── Star Field ──
   function createStarField(count, spread, sizeMin, sizeMax) {
     const positions = new Float32Array(count * 3);
     const colors = new Float32Array(count * 3);
@@ -566,55 +564,143 @@
   window.addEventListener('scroll', highlightNav, { passive: true });
   highlightNav();
 
-  // ── Scroll Reveal ──
-  const revealElements = document.querySelectorAll('.reveal');
-  const revealObserver = new IntersectionObserver(
-    (entries) => {
-      entries.forEach((entry) => {
-        if (entry.isIntersecting) {
-          entry.target.classList.add('visible');
-        }
-      });
-    },
-    { threshold: 0.1, rootMargin: '0px 0px -50px 0px' }
-  );
+  // ── Telemetry Fluctuation Loop ──
+  const pressureVal = document.getElementById('tel-pressure');
+  const uvVal = document.getElementById('tel-uv');
+  const tempVal = document.getElementById('tel-temp');
+  const latencyVal = document.getElementById('tel-latency');
 
-  revealElements.forEach((el) => revealObserver.observe(el));
+  if (pressureVal || uvVal || tempVal) {
+    setInterval(() => {
+      if (pressureVal) {
+        const p = (0.083 + Math.random() * 0.006).toFixed(3);
+        pressureVal.textContent = `${p} atm`;
+      }
+      if (uvVal) {
+        const uv = Math.floor(100 + Math.random() * 6);
+        uvVal.textContent = `${uv} W/m²`;
+      }
+      if (tempVal) {
+        const tKelvin = Math.floor(241 + Math.random() * 5);
+        const tCelsius = tKelvin - 273;
+        tempVal.textContent = `${tKelvin} K (${tCelsius}°C)`;
+      }
+      if (latencyVal) {
+        const latency = Math.floor(1235 + Math.random() * 10);
+        latencyVal.textContent = `${latency}s (Mars)`;
+      }
+    }, 2000);
+  }
 
-  // ── Form Handling ──
+  // ── Form Telemetry Transmission ──
   const form = document.querySelector('.agency-form');
   if (form) {
     form.addEventListener('submit', (e) => {
       e.preventDefault();
+      
+      const emailInput = document.getElementById('contact-email');
+      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+      if (emailInput && !emailRegex.test(emailInput.value)) {
+        alert("Please enter a valid email address.");
+        return;
+      }
+
       const btn = form.querySelector('button[type="submit"]');
       const originalText = btn.textContent;
-      btn.textContent = 'TRANSMITTING...';
-      btn.style.opacity = '0.6';
+      btn.disabled = true;
+      btn.style.opacity = '0.7';
 
-      setTimeout(() => {
-        btn.textContent = 'BRIEF RECEIVED';
-        btn.style.backgroundColor = '#2e7d32';
-        btn.style.opacity = '1';
+      const phases = [
+        { text: "[1/3] PACKAGING FIELD TELEMETRY DATA...", bg: "#d85c32" },
+        { text: "[2/3] ESTABLISHING QUANTIFICATION LINK...", bg: "#c1440e" },
+        { text: "[3/3] TRANSMITTING CAMPAIGN PROPOSAL...", bg: "#a84520" }
+      ];
 
-        setTimeout(() => {
-          btn.textContent = originalText;
-          btn.style.backgroundColor = '';
-          btn.style.opacity = '1';
-          form.reset();
-        }, 3000);
-      }, 1500);
+      let phaseIdx = 0;
+
+      function runTransmitPhase() {
+        if (phaseIdx < phases.length) {
+          btn.textContent = phases[phaseIdx].text;
+          btn.style.backgroundColor = phases[phaseIdx].bg;
+          phaseIdx++;
+          setTimeout(runTransmitPhase, 1000);
+        } else {
+          btn.textContent = "✓ TELEMETRY TRANSMITTED";
+          btn.style.backgroundColor = "#2e7d32";
+          btn.style.opacity = "1";
+          
+          setTimeout(() => {
+            btn.disabled = false;
+            btn.textContent = originalText;
+            btn.style.backgroundColor = "";
+            btn.style.opacity = "1";
+            form.reset();
+          }, 3000);
+        }
+      }
+      
+      runTransmitPhase();
     });
   }
 
-  // ── Preloader ──
-  window.addEventListener('load', () => {
-    const preloader = document.getElementById('preloader');
-    if (preloader) {
-      preloader.style.opacity = '0';
-      setTimeout(() => {
-        preloader.style.display = 'none';
-      }, 600);
+  // ── Diagnostics Preloader Sequence ──
+  const consoleEl = document.getElementById('loader-console');
+  const diagnostics = [
+    "[SYS] Allocating WebGL context...",
+    "[SYS] Context bound: SM-3D-RENDERER",
+    "[SHD] Compiling starfield vertex shader... OK",
+    "[SHD] Compiling twinkle fragment shader... OK",
+    "[DATA] Building procedurally textured Mars...",
+    "[DATA] Vertex arrays allocated: 64x64 buffer",
+    "[SYS] Initializing scroll parallax pipeline...",
+    "[SYS] Mohali simulation link: ONLINE",
+    "[SYS] Environmental qualification systems: READY"
+  ];
+
+  let currentLogIdx = 0;
+
+  function runDiagnostics(callback) {
+    if (!consoleEl) {
+      callback();
+      return;
     }
+
+    function addNextLog() {
+      if (currentLogIdx < diagnostics.length) {
+        const line = document.createElement('div');
+        line.textContent = diagnostics[currentLogIdx];
+        line.style.marginBottom = '2px';
+        line.style.opacity = '0';
+        line.style.transition = 'opacity 0.15s ease';
+        consoleEl.appendChild(line);
+        
+        // Trigger reflow
+        line.offsetHeight;
+        line.style.opacity = '1';
+        
+        consoleEl.scrollTop = consoleEl.scrollHeight;
+        currentLogIdx++;
+        
+        const delay = 80 + Math.random() * 120;
+        setTimeout(addNextLog, delay);
+      } else {
+        setTimeout(callback, 400);
+      }
+    }
+    
+    setTimeout(addNextLog, 150);
+  }
+
+  window.addEventListener('load', () => {
+    runDiagnostics(() => {
+      const preloader = document.getElementById('preloader');
+      if (preloader) {
+        preloader.style.opacity = '0';
+        setTimeout(() => {
+          preloader.style.display = 'none';
+        }, 600);
+      }
+    });
   });
 
 })();
