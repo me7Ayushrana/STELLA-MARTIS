@@ -10,5 +10,17 @@
     "spitiTravel": "8 researchers",
     "submittedAt": "2026-06-01T14:52:17.927Z",
     "status": "pending"
+  },
+  {
+    "id": "CAMP-1780325603841",
+    "organization": "ISRO",
+    "email": "contact@isro.gov.in",
+    "hardware": "Chandrayaan Lander",
+    "testConditions": "Not specified",
+    "timeline": "Not specified",
+    "deliverables": "Research Report & Raw Data",
+    "spitiTravel": "Not applicable",
+    "submittedAt": "2026-06-01T14:53:23.841Z",
+    "status": "pending"
   }
 ]
