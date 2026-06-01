@@ -179,6 +179,29 @@ app.post('/api/campaigns', async (req, res) => {
   }
 });
 
+// GET /api/campaigns/admin/all - Get all campaigns for admin dashboard (public endpoint)
+app.get('/api/campaigns/admin/all', async (req, res) => {
+  const client = await pool.connect();
+  try {
+    const result = await client.query(
+      'SELECT * FROM campaigns ORDER BY created_at DESC'
+    );
+    res.json({
+      success: true,
+      campaigns: result.rows,
+      count: result.rows.length,
+    });
+  } catch (error) {
+    console.error('[v0] Error fetching campaigns for admin:', error.message);
+    res.status(500).json({
+      success: false,
+      message: 'Error fetching campaigns: ' + error.message,
+    });
+  } finally {
+    client.release();
+  }
+});
+
 // GET /api/campaigns - Get all campaigns (requires authentication)
 app.get('/api/campaigns', verifyToken, async (req, res) => {
   const client = await pool.connect();

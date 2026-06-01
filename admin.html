@@ -340,8 +340,14 @@
   <script>
     async function loadCampaigns() {
       try {
-        const response = await fetch('/api/campaigns');
-        const campaigns = await response.json();
+        const response = await fetch('/api/campaigns/admin/all');
+        const data = await response.json();
+        
+        if (!data.success) {
+          throw new Error(data.message);
+        }
+        
+        const campaigns = data.campaigns;
 
         console.log('[v0] Loaded campaigns:', campaigns.length);
 
@@ -383,15 +389,15 @@
         html += '</tr></thead><tbody>';
 
         campaigns.forEach(campaign => {
-          const date = new Date(campaign.submittedAt).toLocaleDateString();
+          const date = new Date(campaign.created_at).toLocaleDateString();
           html += `<tr>`;
-          html += `<td><span class="campaign-id">${campaign.id}</span></td>`;
+          html += `<td><span class="campaign-id">${campaign.campaign_id}</span></td>`;
           html += `<td>${campaign.organization}</td>`;
           html += `<td><a href="mailto:${campaign.email}" style="color: #d85c32; text-decoration: underline;">${campaign.email}</a></td>`;
           html += `<td><div class="campaign-details">${campaign.hardware.substring(0, 50)}...</div></td>`;
           html += `<td><span class="status-badge status-${campaign.status}">${campaign.status}</span></td>`;
           html += `<td>${date}</td>`;
-          html += `<td><button class="expand-btn" onclick="viewCampaign('${campaign.id}')">View</button></td>`;
+          html += `<td><button class="expand-btn" onclick="viewCampaign('${campaign.campaign_id}')">View</button></td>`;
           html += `</tr>`;
         });
 
@@ -409,19 +415,29 @@
 
     async function viewCampaign(campaignId) {
       try {
-        const response = await fetch(`/api/campaigns/${campaignId}`);
-        const campaign = await response.json();
+        const response = await fetch('/api/campaigns/admin/all');
+        const data = await response.json();
+        
+        if (!data.success) {
+          throw new Error(data.message);
+        }
+        
+        const campaign = data.campaigns.find(c => c.campaign_id === campaignId);
+        
+        if (!campaign) {
+          throw new Error('Campaign not found');
+        }
 
-        const date = new Date(campaign.submittedAt).toLocaleString();
+        const date = new Date(campaign.created_at).toLocaleString();
 
         let html = `
           <div class="detail-row">
             <div class="detail-label">Campaign ID</div>
-            <div class="detail-value"><code>${campaign.id}</code></div>
+            <div class="detail-value"><code>${campaign.campaign_id}</code></div>
           </div>
           <div class="detail-row">
             <div class="detail-label">Organization</div>
-            <div class="detail-value">${campaign.organization}</div>
+            <div class="detail-value">${campaign.organization || 'N/A'}</div>
           </div>
           <div class="detail-row">
             <div class="detail-label">Contact Email</div>
@@ -429,23 +445,23 @@
           </div>
           <div class="detail-row">
             <div class="detail-label">Hardware</div>
-            <div class="detail-value">${campaign.hardware}</div>
+            <div class="detail-value">${campaign.hardware || 'N/A'}</div>
           </div>
           <div class="detail-row">
             <div class="detail-label">Test Conditions</div>
-            <div class="detail-value">${campaign.testConditions}</div>
+            <div class="detail-value">${campaign.test_conditions || 'N/A'}</div>
           </div>
           <div class="detail-row">
             <div class="detail-label">Timeline</div>
-            <div class="detail-value">${campaign.timeline}</div>
+            <div class="detail-value">${campaign.timeline || 'N/A'}</div>
           </div>
           <div class="detail-row">
             <div class="detail-label">Deliverables</div>
-            <div class="detail-value">${campaign.deliverables}</div>
+            <div class="detail-value">${campaign.deliverables || 'N/A'}</div>
           </div>
           <div class="detail-row">
             <div class="detail-label">Spiti Travel</div>
-            <div class="detail-value">${campaign.spitiTravel}</div>
+            <div class="detail-value">${campaign.spiti_travel || 'N/A'}</div>
           </div>
           <div class="detail-row">
             <div class="detail-label">Submitted</div>
