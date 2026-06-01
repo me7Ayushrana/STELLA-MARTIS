@@ -274,41 +274,41 @@
       </div>
       
       <div class="content-card reveal slide-up">
-        <form class="agency-form">
+        <form class="agency-form" method="POST">
           <div class="form-row">
             <div class="form-group">
-              <label>ORGANIZATION / TEAM NAME</label>
-              <input type="text" placeholder="Enter organization name">
+              <label>ORGANIZATION / TEAM NAME *</label>
+              <input type="text" name="organization" placeholder="Enter organization name" required>
             </div>
             <div class="form-group">
-              <label>CONTACT EMAIL</label>
-              <input type="email" placeholder="Enter email address">
+              <label>CONTACT EMAIL *</label>
+              <input type="email" name="email" placeholder="Enter email address" required>
             </div>
           </div>
           <div class="form-group">
-            <label>HARDWARE TO BE TESTED</label>
-            <textarea rows="3" placeholder="Describe the hardware (e.g. rover chassis, sensors, etc.)"></textarea>
+            <label>HARDWARE TO BE TESTED *</label>
+            <textarea name="hardware" rows="3" placeholder="Describe the hardware (e.g. rover chassis, sensors, etc.)" required></textarea>
           </div>
           <div class="form-group">
             <label>CRITICAL TEST CONDITIONS</label>
-            <input type="text" placeholder="e.g. Pressure, UV, Regolith, Comms delay, Terrain, Combination">
+            <input type="text" name="conditions" placeholder="e.g. Pressure, UV, Regolith, Comms delay, Terrain, Combination">
           </div>
           <div class="form-row">
             <div class="form-group">
               <label>PREFERRED TIMELINE</label>
-              <input type="text" placeholder="e.g. Q4 2026">
+              <input type="text" name="timeline" placeholder="e.g. Q4 2026">
             </div>
             <div class="form-group">
               <label>DELIVERABLES REQUIRED</label>
-              <select>
-                <option>Research Report & Raw Data</option>
-                <option>Raw Data Only</option>
+              <select name="deliverables">
+                <option value="report_and_data">Research Report & Raw Data</option>
+                <option value="raw_data_only">Raw Data Only</option>
               </select>
             </div>
           </div>
           <div class="form-group">
             <label>SPITI TRAVEL (IF APPLICABLE)</label>
-            <input type="text" placeholder="Team size if travelling to Spiti Valley">
+            <input type="text" name="spiti_team" placeholder="Team size if travelling to Spiti Valley">
           </div>
           <button type="submit" class="btn btn-primary btn-block">SUBMIT CAMPAIGN BRIEF</button>
         </form>
