@@ -1,8 +1,9 @@
 const express = require('express');
 const cors = require('cors');
 const nodemailer = require('nodemailer');
-const fs = require('fs').promises;
-const path = require('path');
+const { Pool } = require('pg');
+const bcrypt = require('bcryptjs');
+const jwt = require('jsonwebtoken');
 require('dotenv').config();
 
 const app = express();
@@ -12,34 +13,22 @@ app.use(cors());
 app.use(express.json());
 app.use(express.static('.'));
 
-// Database path for storing submissions
-const dbPath = path.join(__dirname, 'campaigns.json');
+// ============================================
+// DATABASE CONNECTION (NEON POSTGRES)
+// ============================================
+const pool = new Pool({
+  connectionString: process.env.DATABASE_URL,
+});
 
-// Initialize campaigns database
-async function initDatabase() {
-  try {
-    await fs.access(dbPath);
-  } catch {
-    await fs.writeFile(dbPath, JSON.stringify([]));
-  }
-}
+pool.on('error', (err) => {
+  console.error('[v0] Unexpected error on idle client', err);
+});
 
-// Read campaigns from file
-async function readCampaigns() {
-  try {
-    const data = await fs.readFile(dbPath, 'utf-8');
-    return JSON.parse(data);
-  } catch {
-    return [];
-  }
-}
+console.log('[v0] Neon PostgreSQL connected at:', process.env.DATABASE_URL?.split('@')[1] || 'unknown');
 
-// Write campaigns to file
-async function writeCampaigns(campaigns) {
-  await fs.writeFile(dbPath, JSON.stringify(campaigns, null, 2));
-}
-
-// Setup email transporter
+// ============================================
+// EMAIL CONFIGURATION
+// ============================================
 const transporter = nodemailer.createTransport({
   service: 'gmail',
   auth: {
@@ -48,26 +37,65 @@ const transporter = nodemailer.createTransport({
   },
 });
 
-// Fallback: Console logging if email is not configured
 const sendEmail = async (mailOptions) => {
   try {
     if (!process.env.EMAIL_USER || !process.env.EMAIL_PASSWORD) {
       console.log('[v0] Email not configured. Logging submission instead:');
-      console.log(mailOptions);
+      console.log('[v0]', mailOptions);
       return { messageId: 'mock_' + Date.now() };
     }
     return await transporter.sendMail(mailOptions);
   } catch (error) {
     console.error('[v0] Email error:', error.message);
-    // Continue even if email fails
     return { messageId: 'error_' + Date.now() };
   }
 };
 
-// Campaign submission endpoint
-app.post('/api/campaigns', async (req, res) => {
+// ============================================
+// AUTHENTICATION HELPERS
+// ============================================
+const JWT_SECRET = process.env.JWT_SECRET || 'your-secret-key-change-in-production';
+
+async function hashPassword(password) {
+  return bcrypt.hash(password, 10);
+}
+
+async function comparePassword(plainPassword, hashedPassword) {
+  return bcrypt.compare(plainPassword, hashedPassword);
+}
+
+function generateToken(adminId) {
+  return jwt.sign({ adminId }, JWT_SECRET, { expiresIn: '7d' });
+}
+
+// ============================================
+// MIDDLEWARE: Verify JWT Token
+// ============================================
+const verifyToken = (req, res, next) => {
+  const token = req.headers.authorization?.split(' ')[1];
+  
+  if (!token) {
+    return res.status(401).json({ success: false, message: 'No token provided' });
+  }
+  
   try {
-    console.log('[v0] Received campaign submission:', req.body);
+    const decoded = jwt.verify(token, JWT_SECRET);
+    req.adminId = decoded.adminId;
+    next();
+  } catch (error) {
+    return res.status(401).json({ success: false, message: 'Invalid or expired token' });
+  }
+};
+
+// ============================================
+// CAMPAIGN ENDPOINTS
+// ============================================
+
+// POST /api/campaigns - Submit a campaign (public)
+app.post('/api/campaigns', async (req, res) => {
+  const client = await pool.connect();
+  try {
+    console.log('[v0] Received campaign submission from:', req.body.email);
     
     const {
       organization,
@@ -96,167 +124,401 @@ app.post('/api/campaigns', async (req, res) => {
       });
     }
 
-    // Create campaign object
-    const campaign = {
-      id: 'CAMP-' + Date.now(),
-      organization,
-      email,
-      hardware,
-      testConditions: testConditions || 'Not specified',
-      timeline: timeline || 'Not specified',
-      deliverables: deliverables || 'Research Report & Raw Data',
-      spitiTravel: spitiTravel || 'Not applicable',
-      submittedAt: new Date().toISOString(),
-      status: 'pending',
-    };
+    // Generate unique campaign ID
+    const campaignId = 'CAMP-' + Date.now();
 
-    // Save to database
-    const campaigns = await readCampaigns();
-    campaigns.push(campaign);
-    await writeCampaigns(campaigns);
+    // Insert into database
+    const result = await client.query(
+      `INSERT INTO campaigns 
+        (campaign_id, organization, email, hardware, test_conditions, timeline, deliverables, spiti_travel, status)
+       VALUES ($1, $2, $3, $4, $5, $6, $7, $8, 'pending')
+       RETURNING *`,
+      [campaignId, organization, email, hardware, testConditions, timeline, deliverables, spitiTravel]
+    );
 
-    console.log('[v0] Campaign saved:', campaign.id);
+    const campaign = result.rows[0];
+    console.log('[v0] Campaign saved to database:', campaignId);
 
-    // Send confirmation email to client
+    // Add audit log
+    await client.query(
+      `INSERT INTO audit_logs (campaign_id, action, changed_by, new_status, notes)
+       VALUES ($1, 'created', 'system', 'pending', 'Campaign submitted via web form')`,
+      [campaignId]
+    );
+
+    // Send confirmation email
     await sendEmail({
-      from: process.env.EMAIL_USER || 'noreply@stellamartis.in',
+      from: process.env.EMAIL_USER,
       to: email,
-      subject: `Campaign Submission Received - ${campaign.id}`,
+      subject: `Campaign Submission Confirmation - ${campaignId}`,
       html: `
-        <div style="font-family: 'Roboto', sans-serif; max-width: 600px; margin: 0 auto; color: #333;">
-          <h2 style="color: #d4673b; border-bottom: 2px solid #d4673b; padding-bottom: 10px;">
-            Campaign Brief Received
-          </h2>
-          <p>Hi <strong>${organization}</strong>,</p>
-          <p>Thank you for submitting your test campaign brief to <strong>Stella Martis</strong>. We've received your submission and will review it shortly.</p>
-          
-          <h3 style="color: #666; margin-top: 30px;">Campaign Details:</h3>
-          <table style="width: 100%; border-collapse: collapse; margin: 20px 0;">
-            <tr style="background-color: #f5f5f5;">
-              <td style="padding: 10px; border: 1px solid #ddd; font-weight: bold;">Campaign ID:</td>
-              <td style="padding: 10px; border: 1px solid #ddd;">${campaign.id}</td>
-            </tr>
-            <tr>
-              <td style="padding: 10px; border: 1px solid #ddd; font-weight: bold;">Organization:</td>
-              <td style="padding: 10px; border: 1px solid #ddd;">${organization}</td>
-            </tr>
-            <tr style="background-color: #f5f5f5;">
-              <td style="padding: 10px; border: 1px solid #ddd; font-weight: bold;">Hardware:</td>
-              <td style="padding: 10px; border: 1px solid #ddd;">${hardware}</td>
-            </tr>
-            <tr>
-              <td style="padding: 10px; border: 1px solid #ddd; font-weight: bold;">Test Conditions:</td>
-              <td style="padding: 10px; border: 1px solid #ddd;">${testConditions}</td>
-            </tr>
-            <tr style="background-color: #f5f5f5;">
-              <td style="padding: 10px; border: 1px solid #ddd; font-weight: bold;">Timeline:</td>
-              <td style="padding: 10px; border: 1px solid #ddd;">${timeline}</td>
-            </tr>
-            <tr>
-              <td style="padding: 10px; border: 1px solid #ddd; font-weight: bold;">Deliverables:</td>
-              <td style="padding: 10px; border: 1px solid #ddd;">${deliverables}</td>
-            </tr>
-            ${spitiTravel ? `
-            <tr style="background-color: #f5f5f5;">
-              <td style="padding: 10px; border: 1px solid #ddd; font-weight: bold;">Spiti Travel Team Size:</td>
-              <td style="padding: 10px; border: 1px solid #ddd;">${spitiTravel}</td>
-            </tr>
-            ` : ''}
-          </table>
-
-          <p><strong>What happens next?</strong></p>
-          <ul style="line-height: 1.8;">
-            <li>Our team will review your campaign brief within <strong>48 hours</strong></li>
-            <li>We'll send you a detailed campaign plan with timeline and cost estimate</li>
-            <li>If we need clarification, we'll reach out directly</li>
-          </ul>
-
-          <p>If you have any questions in the meantime, feel free to reply to this email or contact us at <strong>contact@stellamartis.in</strong></p>
-
-          <hr style="border: none; border-top: 1px solid #ddd; margin: 40px 0;">
-          <p style="color: #999; font-size: 12px; text-align: center;">
-            Stella Martis — Mars Analog Testing Infrastructure<br>
-            Chandigarh, India | contact@stellamartis.in
-          </p>
-        </div>
-      `,
-    });
-
-    console.log('[v0] Confirmation email sent to:', email);
-
-    // Send notification to admin
-    await sendEmail({
-      from: process.env.EMAIL_USER || 'noreply@stellamartis.in',
-      to: process.env.ADMIN_EMAIL || 'contact@stellamartis.in',
-      subject: `New Campaign Submission - ${organization}`,
-      html: `
-        <h2>New Campaign Submission</h2>
-        <p><strong>Campaign ID:</strong> ${campaign.id}</p>
+        <h2>Campaign Submission Received</h2>
+        <p>Thank you for submitting your campaign request to Stella Martis.</p>
+        <p><strong>Campaign ID:</strong> ${campaignId}</p>
         <p><strong>Organization:</strong> ${organization}</p>
-        <p><strong>Contact:</strong> ${email}</p>
         <p><strong>Hardware:</strong> ${hardware}</p>
-        <p><strong>Test Conditions:</strong> ${testConditions}</p>
-        <p><strong>Timeline:</strong> ${timeline}</p>
-        <p><strong>Deliverables:</strong> ${deliverables}</p>
-        <p><strong>Spiti Travel:</strong> ${spitiTravel}</p>
-        <p><strong>Submitted:</strong> ${campaign.submittedAt}</p>
-        <hr>
-        <p><a href="http://localhost:3000/campaigns">View all campaigns</a></p>
+        <p>Your submission is being reviewed. You will receive updates via email.</p>
+        <p>Best regards,<br>Stella Martis Team</p>
       `,
     });
 
-    console.log('[v0] Admin notification sent');
-
-    // Return success response
-    res.json({
+    res.status(201).json({
       success: true,
-      message: 'Campaign brief submitted successfully',
-      campaignId: campaign.id,
+      message: 'Campaign submitted successfully',
+      campaignId,
+      campaign,
     });
   } catch (error) {
-    console.error('[v0] Server error:', error);
+    console.error('[v0] Error submitting campaign:', error.message);
     res.status(500).json({
       success: false,
-      message: 'Error processing submission: ' + error.message,
+      message: 'Error submitting campaign: ' + error.message,
     });
+  } finally {
+    client.release();
   }
 });
 
-// Get all campaigns (admin endpoint)
-app.get('/api/campaigns', async (req, res) => {
+// GET /api/campaigns - Get all campaigns (requires authentication)
+app.get('/api/campaigns', verifyToken, async (req, res) => {
+  const client = await pool.connect();
   try {
-    const campaigns = await readCampaigns();
-    res.json(campaigns);
+    const result = await client.query(
+      'SELECT * FROM campaigns ORDER BY created_at DESC'
+    );
+    res.json({
+      success: true,
+      campaigns: result.rows,
+      count: result.rows.length,
+    });
   } catch (error) {
-    res.status(500).json({ error: error.message });
+    console.error('[v0] Error fetching campaigns:', error.message);
+    res.status(500).json({
+      success: false,
+      message: 'Error fetching campaigns: ' + error.message,
+    });
+  } finally {
+    client.release();
   }
 });
 
-// Get single campaign
-app.get('/api/campaigns/:id', async (req, res) => {
+// GET /api/campaigns/:id - Get specific campaign
+app.get('/api/campaigns/:id', verifyToken, async (req, res) => {
+  const client = await pool.connect();
   try {
-    const campaigns = await readCampaigns();
-    const campaign = campaigns.find(c => c.id === req.params.id);
-    if (!campaign) {
-      return res.status(404).json({ error: 'Campaign not found' });
+    const result = await client.query(
+      'SELECT * FROM campaigns WHERE campaign_id = $1',
+      [req.params.id]
+    );
+    
+    if (result.rows.length === 0) {
+      return res.status(404).json({
+        success: false,
+        message: 'Campaign not found',
+      });
     }
-    res.json(campaign);
+    
+    res.json({
+      success: true,
+      campaign: result.rows[0],
+    });
   } catch (error) {
-    res.status(500).json({ error: error.message });
+    console.error('[v0] Error fetching campaign:', error.message);
+    res.status(500).json({
+      success: false,
+      message: 'Error fetching campaign: ' + error.message,
+    });
+  } finally {
+    client.release();
   }
 });
 
-// Initialize database and start server
-const PORT = process.env.PORT || 3000;
+// PUT /api/campaigns/:id/status - Update campaign status
+app.put('/api/campaigns/:id/status', verifyToken, async (req, res) => {
+  const client = await pool.connect();
+  try {
+    const { status, notes } = req.body;
+    const validStatuses = ['pending', 'approved', 'rejected'];
+    
+    if (!validStatuses.includes(status)) {
+      return res.status(400).json({
+        success: false,
+        message: 'Invalid status. Must be: pending, approved, or rejected',
+      });
+    }
 
-initDatabase().then(() => {
-  app.listen(PORT, () => {
-    console.log(`[v0] Stella Martis server running on http://localhost:${PORT}`);
-    console.log(`[v0] POST /api/campaigns - Submit a campaign`);
-    console.log(`[v0] GET /api/campaigns - View all campaigns`);
-    console.log(`[v0] GET /api/campaigns/:id - View specific campaign`);
-  });
-}).catch(error => {
-  console.error('[v0] Failed to initialize database:', error);
-  process.exit(1);
+    // Get current campaign to log changes
+    const currentResult = await client.query(
+      'SELECT status FROM campaigns WHERE campaign_id = $1',
+      [req.params.id]
+    );
+
+    if (currentResult.rows.length === 0) {
+      return res.status(404).json({
+        success: false,
+        message: 'Campaign not found',
+      });
+    }
+
+    const oldStatus = currentResult.rows[0].status;
+
+    // Update campaign
+    await client.query(
+      'UPDATE campaigns SET status = $1 WHERE campaign_id = $2',
+      [status, req.params.id]
+    );
+
+    // Add audit log
+    await client.query(
+      `INSERT INTO audit_logs (campaign_id, action, changed_by, old_status, new_status, notes)
+       VALUES ($1, 'status_updated', $2, $3, $4, $5)`,
+      [req.params.id, req.adminId, oldStatus, status, notes]
+    );
+
+    console.log(`[v0] Campaign ${req.params.id} status updated from ${oldStatus} to ${status}`);
+
+    res.json({
+      success: true,
+      message: `Campaign status updated to ${status}`,
+    });
+  } catch (error) {
+    console.error('[v0] Error updating campaign status:', error.message);
+    res.status(500).json({
+      success: false,
+      message: 'Error updating campaign: ' + error.message,
+    });
+  } finally {
+    client.release();
+  }
+});
+
+// ============================================
+// ADMIN AUTHENTICATION ENDPOINTS
+// ============================================
+
+// POST /api/auth/register - Create admin account
+app.post('/api/auth/register', async (req, res) => {
+  const client = await pool.connect();
+  try {
+    const { username, email, password } = req.body;
+
+    if (!username || !email || !password) {
+      return res.status(400).json({
+        success: false,
+        message: 'Missing required fields: username, email, password',
+      });
+    }
+
+    // Check if user exists
+    const existingUser = await client.query(
+      'SELECT id FROM admin_users WHERE username = $1 OR email = $2',
+      [username, email]
+    );
+
+    if (existingUser.rows.length > 0) {
+      return res.status(400).json({
+        success: false,
+        message: 'Username or email already exists',
+      });
+    }
+
+    // Hash password
+    const passwordHash = await hashPassword(password);
+
+    // Insert admin user
+    const result = await client.query(
+      `INSERT INTO admin_users (username, email, password_hash, is_admin)
+       VALUES ($1, $2, $3, true)
+       RETURNING id, username, email`,
+      [username, email, passwordHash]
+    );
+
+    const admin = result.rows[0];
+    const token = generateToken(admin.id);
+
+    console.log(`[v0] New admin user registered: ${username}`);
+
+    res.status(201).json({
+      success: true,
+      message: 'Admin account created successfully',
+      admin,
+      token,
+    });
+  } catch (error) {
+    console.error('[v0] Error registering admin:', error.message);
+    res.status(500).json({
+      success: false,
+      message: 'Error registering admin: ' + error.message,
+    });
+  } finally {
+    client.release();
+  }
+});
+
+// POST /api/auth/login - Login admin
+app.post('/api/auth/login', async (req, res) => {
+  const client = await pool.connect();
+  try {
+    const { username, password } = req.body;
+
+    if (!username || !password) {
+      return res.status(400).json({
+        success: false,
+        message: 'Missing username or password',
+      });
+    }
+
+    // Find user
+    const result = await client.query(
+      'SELECT * FROM admin_users WHERE username = $1',
+      [username]
+    );
+
+    if (result.rows.length === 0) {
+      return res.status(401).json({
+        success: false,
+        message: 'Invalid username or password',
+      });
+    }
+
+    const admin = result.rows[0];
+
+    // Compare password
+    const passwordMatch = await comparePassword(password, admin.password_hash);
+
+    if (!passwordMatch) {
+      return res.status(401).json({
+        success: false,
+        message: 'Invalid username or password',
+      });
+    }
+
+    const token = generateToken(admin.id);
+
+    console.log(`[v0] Admin logged in: ${username}`);
+
+    res.json({
+      success: true,
+      message: 'Login successful',
+      admin: { id: admin.id, username: admin.username, email: admin.email },
+      token,
+    });
+  } catch (error) {
+    console.error('[v0] Error logging in:', error.message);
+    res.status(500).json({
+      success: false,
+      message: 'Error logging in: ' + error.message,
+    });
+  } finally {
+    client.release();
+  }
+});
+
+// ============================================
+// AUDIT LOG ENDPOINTS
+// ============================================
+
+// GET /api/audit-logs/:campaignId - Get audit logs for a campaign
+app.get('/api/audit-logs/:campaignId', verifyToken, async (req, res) => {
+  const client = await pool.connect();
+  try {
+    const result = await client.query(
+      'SELECT * FROM audit_logs WHERE campaign_id = $1 ORDER BY created_at DESC',
+      [req.params.campaignId]
+    );
+    
+    res.json({
+      success: true,
+      logs: result.rows,
+    });
+  } catch (error) {
+    console.error('[v0] Error fetching audit logs:', error.message);
+    res.status(500).json({
+      success: false,
+      message: 'Error fetching audit logs: ' + error.message,
+    });
+  } finally {
+    client.release();
+  }
+});
+
+// ============================================
+// STATISTICS ENDPOINTS
+// ============================================
+
+// GET /api/stats - Get campaign statistics
+app.get('/api/stats', verifyToken, async (req, res) => {
+  const client = await pool.connect();
+  try {
+    const result = await client.query(`
+      SELECT 
+        COUNT(*) as total,
+        SUM(CASE WHEN status = 'pending' THEN 1 ELSE 0 END) as pending,
+        SUM(CASE WHEN status = 'approved' THEN 1 ELSE 0 END) as approved,
+        SUM(CASE WHEN status = 'rejected' THEN 1 ELSE 0 END) as rejected
+      FROM campaigns
+    `);
+
+    const stats = result.rows[0];
+
+    res.json({
+      success: true,
+      stats: {
+        total: parseInt(stats.total),
+        pending: parseInt(stats.pending || 0),
+        approved: parseInt(stats.approved || 0),
+        rejected: parseInt(stats.rejected || 0),
+      },
+    });
+  } catch (error) {
+    console.error('[v0] Error fetching stats:', error.message);
+    res.status(500).json({
+      success: false,
+      message: 'Error fetching statistics: ' + error.message,
+    });
+  } finally {
+    client.release();
+  }
+});
+
+// ============================================
+// HEALTH CHECK
+// ============================================
+
+app.get('/api/health', async (req, res) => {
+  const client = await pool.connect();
+  try {
+    await client.query('SELECT 1');
+    res.json({
+      success: true,
+      message: 'Server and database are healthy',
+      timestamp: new Date().toISOString(),
+    });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      message: 'Database connection failed: ' + error.message,
+    });
+  } finally {
+    client.release();
+  }
+});
+
+// ============================================
+// START SERVER
+// ============================================
+
+const PORT = process.env.PORT || 3000;
+app.listen(PORT, () => {
+  console.log(`[v0] Server running on port ${PORT}`);
+  console.log(`[v0] API endpoints:`);
+  console.log(`[v0]   POST   /api/campaigns           - Submit campaign (public)`);
+  console.log(`[v0]   GET    /api/campaigns           - List all campaigns (protected)`);
+  console.log(`[v0]   GET    /api/campaigns/:id       - Get specific campaign (protected)`);
+  console.log(`[v0]   PUT    /api/campaigns/:id/status - Update campaign status (protected)`);
+  console.log(`[v0]   POST   /api/auth/register       - Register admin`);
+  console.log(`[v0]   POST   /api/auth/login          - Login admin`);
+  console.log(`[v0]   GET    /api/audit-logs/:id      - Get audit logs (protected)`);
+  console.log(`[v0]   GET    /api/stats               - Get statistics (protected)`);
+  console.log(`[v0]   GET    /api/health              - Health check`);
 });

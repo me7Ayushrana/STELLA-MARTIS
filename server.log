@@ -1,0 +1,41 @@
+◇ injected env (7) from .env // tip: ⌘ custom filepath { path: '/custom/path/.env' }
+[v0] Neon PostgreSQL connected at: ep-silent-night-aqtvzcrl-pooler.c-8.us-east-1.aws.neon.tech/neondb?channel_binding=require&sslmode=require
+[v0] Server running on port 3000
+[v0] API endpoints:
+[v0]   POST   /api/campaigns           - Submit campaign (public)
+[v0]   GET    /api/campaigns           - List all campaigns (protected)
+[v0]   GET    /api/campaigns/:id       - Get specific campaign (protected)
+[v0]   PUT    /api/campaigns/:id/status - Update campaign status (protected)
+[v0]   POST   /api/auth/register       - Register admin
+[v0]   POST   /api/auth/login          - Login admin
+[v0]   GET    /api/audit-logs/:id      - Get audit logs (protected)
+[v0]   GET    /api/stats               - Get statistics (protected)
+[v0]   GET    /api/health              - Health check
+(node:6577) Warning: SECURITY WARNING: The SSL modes 'prefer', 'require', and 'verify-ca' are treated as aliases for 'verify-full'.
+In the next major version (pg-connection-string v3.0.0 and pg v9.0.0), these modes will adopt standard libpq semantics, which have weaker security guarantees.
+
+To prepare for this change:
+- If you want the current behavior, explicitly use 'sslmode=verify-full'
+- If you want libpq compatibility now, use 'uselibpqcompat=true&sslmode=require'
+
+See https://www.postgresql.org/docs/current/libpq-ssl.html for libpq SSL mode definitions.
+(Use `node --trace-warnings ...` to show where the warning was created)
+[v0] New admin user registered: admin
+[v0] Received campaign submission from: campaigns@isro.gov.in
+[v0] Campaign saved to database: CAMP-1780326312348
+[v0] Email not configured. Logging submission instead:
+[v0] {
+  from: '',
+  to: 'campaigns@isro.gov.in',
+  subject: 'Campaign Submission Confirmation - CAMP-1780326312348',
+  html: '\n' +
+    '        <h2>Campaign Submission Received</h2>\n' +
+    '        <p>Thank you for submitting your campaign request to Stella Martis.</p>\n' +
+    '        <p><strong>Campaign ID:</strong> CAMP-1780326312348</p>\n' +
+    '        <p><strong>Organization:</strong> Indian Space Research Organisation</p>\n' +
+    '        <p><strong>Hardware:</strong> Chandrayaan Lander with advanced seismic sensors</p>\n' +
+    '        <p>Your submission is being reviewed. You will receive updates via email.</p>\n' +
+    '        <p>Best regards,<br>Stella Martis Team</p>\n' +
+    '      '
+}
+[v0] Campaign CAMP-1780326312348 status updated from pending to approved
