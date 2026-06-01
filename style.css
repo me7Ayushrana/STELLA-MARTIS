@@ -24,11 +24,6 @@
   box-sizing: border-box;
 }
 
-*:focus-visible {
-  outline: 2px solid var(--accent);
-  outline-offset: 4px;
-}
-
 html {
   scroll-behavior: smooth;
   font-size: 16px;
@@ -54,54 +49,7 @@ body {
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
-  z-index: -3; /* fallback behind the 3D space canvas */
-}
-
-/* ---------- 3D Space Background Canvas ---------- */
-#space-canvas {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100vw;
-  height: 100vh;
-  z-index: -2;
-  pointer-events: none; /* ensure page clicks go through to links */
-  display: block;
-}
-
-/* ---------- Telemetry Preloader ---------- */
-#preloader {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background-color: #050510;
-  z-index: 9999;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  transition: opacity 0.6s ease, visibility 0.6s ease;
-}
-
-.loader-content {
-  text-align: center;
-}
-
-.loader-spinner {
-  width: 60px;
-  height: 60px;
-  border: 4px solid rgba(216, 92, 50, 0.1);
-  border-top-color: var(--mars-orange);
-  border-radius: 50%;
-  animation: telemetry-spin 1.2s cubic-bezier(0.5, 0, 0.5, 1) infinite;
-  margin: 0 auto 1.5rem;
-  box-shadow: 0 0 15px rgba(216, 92, 50, 0.2);
-}
-
-@keyframes telemetry-spin {
-  0% { transform: rotate(0deg); }
-  100% { transform: rotate(360deg); }
+  z-index: -1;
 }
 
 .bg-image::after {
@@ -326,18 +274,9 @@ a:hover {
 }
 
 .content-card {
-  background: rgba(15, 15, 20, 0.75);
-  backdrop-filter: blur(12px) saturate(180%);
-  -webkit-backdrop-filter: blur(12px) saturate(180%);
+  background: var(--bg-panel);
   padding: 2.5rem;
-  border: 1px solid rgba(255, 255, 255, 0.08);
-  border-radius: 4px;
-  transition: border-color 0.3s ease, box-shadow 0.3s ease;
-}
-
-.content-card:hover {
-  border-color: rgba(216, 92, 50, 0.3);
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5), 0 0 20px rgba(216, 92, 50, 0.05);
+  border: 1px solid var(--border-color);
 }
 
 .border-top-accent {
@@ -345,19 +284,14 @@ a:hover {
 }
 
 .content-box {
-  background: rgba(30, 30, 35, 0.75);
-  backdrop-filter: blur(8px);
-  -webkit-backdrop-filter: blur(8px);
+  background: var(--bg-panel-light);
   padding: 1.5rem;
-  border: 1px solid rgba(255, 255, 255, 0.06);
-  border-radius: 4px;
+  border: 1px solid var(--border-color);
 }
 
 .accent-box {
-  background: rgba(252, 61, 33, 0.08);
-  border-color: rgba(252, 61, 33, 0.4);
-  backdrop-filter: blur(10px);
-  -webkit-backdrop-filter: blur(10px);
+  background: rgba(252, 61, 33, 0.1);
+  border-color: var(--accent);
 }
 
 .bullet-list {
@@ -373,51 +307,39 @@ a:hover {
 /* ---------- Hero Section ---------- */
 .hero-section {
   min-height: calc(100vh - 80px);
-  display: grid;
-  grid-template-columns: 1.2fr 0.8fr;
-  gap: 3rem;
+  display: flex;
   align-items: center;
-  padding: 3rem 2rem;
+  padding: 2rem;
 }
 
 .hero-content {
-  background: rgba(10, 10, 12, 0.7);
-  backdrop-filter: blur(16px);
-  -webkit-backdrop-filter: blur(16px);
-  padding: 3.5rem;
+  max-width: 800px;
+  background: var(--bg-panel);
+  padding: 3rem;
   border-left: 4px solid var(--accent);
-  border-right: 1px solid rgba(255, 255, 255, 0.05);
-  border-top: 1px solid rgba(255, 255, 255, 0.05);
-  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
-  border-radius: 4px;
 }
 
 .mission-badge {
   font-family: var(--font-heading);
-  font-size: 0.85rem;
+  font-size: 0.8rem;
   color: var(--accent);
-  letter-spacing: 0.25em;
+  letter-spacing: 0.2em;
   margin-bottom: 1rem;
-  display: inline-block;
-  border-bottom: 1px solid rgba(252, 61, 33, 0.3);
-  padding-bottom: 0.25rem;
 }
 
 .hero-content h1 {
-  font-size: clamp(2.4rem, 4.5vw, 3.8rem);
+  font-size: clamp(2.5rem, 5vw, 4rem);
   margin-bottom: 1.5rem;
-  line-height: 1.15;
-  font-weight: 900;
 }
 
 .hero-content .highlight {
-  color: var(--mars-orange);
+  color: var(--text-muted);
 }
 
 .hero-desc {
-  font-size: 1.05rem;
+  font-size: 1.1rem;
   margin-bottom: 1.5rem;
-  color: #e0e0e0;
+  color: #ddd;
 }
 
 .hero-actions {
@@ -427,101 +349,12 @@ a:hover {
   margin-top: 2rem;
 }
 
-/* ---------- Telemetry Dashboard (Hero Right) ---------- */
-.telemetry-dashboard {
-  background: rgba(8, 8, 10, 0.85);
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  border-top: 2px solid var(--mars-orange);
-  border-radius: 4px;
-  padding: 2rem;
-  font-family: monospace;
-  box-shadow: 0 20px 50px rgba(0,0,0,0.8);
-  position: relative;
-  overflow: hidden;
-}
-
-.telemetry-dashboard::before {
-  content: "LIVE SIMULATION TELEMETRY";
-  display: block;
-  font-family: var(--font-heading);
-  font-size: 0.8rem;
-  color: var(--mars-orange);
-  letter-spacing: 0.1em;
-  margin-bottom: 1rem;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.15);
-  padding-bottom: 0.5rem;
-}
-
-.telemetry-grid {
-  display: grid;
-  grid-template-columns: 1fr;
-  gap: 1.25rem;
-}
-
-.telemetry-item {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  border-bottom: 1px dashed rgba(255,255,255,0.05);
-  padding-bottom: 0.5rem;
-}
-
-.telemetry-label {
-  color: var(--text-muted);
-  font-size: 0.8rem;
-  text-transform: uppercase;
-}
-
-.telemetry-value {
-  color: #39ff14; /* retro terminal green */
-  font-weight: 700;
-  font-size: 0.95rem;
-  text-shadow: 0 0 5px rgba(57, 255, 20, 0.3);
-}
-
-.telemetry-value.alert {
-  color: #ff3131; /* red alert */
-  text-shadow: 0 0 5px rgba(255, 49, 49, 0.3);
-}
-
-.telemetry-status {
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-  font-size: 0.8rem;
-  color: #39ff14;
-}
-
-.status-dot {
-  width: 8px;
-  height: 8px;
-  background-color: #39ff14;
-  border-radius: 50%;
-  box-shadow: 0 0 8px #39ff14;
-  animation: pulse-dot 1.5s infinite;
-}
-
-@keyframes pulse-dot {
-  0% { opacity: 0.4; }
-  50% { opacity: 1; }
-  100% { opacity: 0.4; }
-}
-
 /* ---------- Facilities ---------- */
 .facility-panel {
-  background: rgba(15, 15, 20, 0.75);
-  backdrop-filter: blur(12px) saturate(180%);
-  -webkit-backdrop-filter: blur(12px) saturate(180%);
-  border: 1px solid rgba(255, 255, 255, 0.08);
-  border-radius: 4px;
+  background: var(--bg-panel);
+  border: 1px solid var(--border-color);
   padding: 2.5rem;
   margin-bottom: 3rem;
-  transition: border-color 0.3s ease, box-shadow 0.3s ease;
-}
-
-.facility-panel:hover {
-  border-color: rgba(216, 92, 50, 0.3);
-  box-shadow: 0 15px 40px rgba(0, 0, 0, 0.6), 0 0 30px rgba(216, 92, 50, 0.05);
 }
 
 .facility-header {
@@ -743,18 +576,41 @@ a:hover {
 /* ============================================
    ANIMATION UTILITIES 
    ============================================ */
-/* Smooth interactive micro-transitions */
+.reveal {
+  opacity: 0;
+  transition: all 0.8s cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+
+/* Slide Up */
+.reveal.slide-up { transform: translateY(40px); }
+.reveal.slide-up.visible { opacity: 1; transform: translateY(0); }
+
+/* Fade In */
+.reveal.fade-in { transform: translateY(10px); }
+.reveal.fade-in.visible { opacity: 1; transform: translateY(0); }
+
+/* Scale In */
+.reveal.scale-in { transform: scale(0.95); }
+.reveal.scale-in.visible { opacity: 1; transform: scale(1); }
+
+/* Delays */
+.delay-1 { transition-delay: 0.1s; }
+.delay-2 { transition-delay: 0.2s; }
+.delay-3 { transition-delay: 0.3s; }
+.delay-4 { transition-delay: 0.4s; }
+
+/* Turn off delays on mobile to prevent staggered jank on single column */
+@media (max-width: 768px) {
+  .delay-1, .delay-2, .delay-3, .delay-4 {
+    transition-delay: 0s !important;
+  }
+}
 
 /* ============================================
    RESPONSIVE DESIGN (SUPER MOBILE FRIENDLY)
    ============================================ */
 
 @media (max-width: 992px) {
-  .hero-section {
-    grid-template-columns: 1fr;
-    gap: 2.5rem;
-    padding: 2rem 1rem;
-  }
   .grid-2, .specs-grid, .footer-grid {
     grid-template-columns: 1fr;
     gap: 1.5rem;

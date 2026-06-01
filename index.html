@@ -13,25 +13,10 @@
 
   <!-- Styles -->
   <link rel="stylesheet" href="style.css" />
-
-  <!-- Three.js Library -->
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
 </head>
 <body>
 
-  <!-- Preloader Screen -->
-  <div id="preloader">
-    <div class="loader-content">
-      <div class="loader-spinner"></div>
-      <p style="letter-spacing:0.2em; color:var(--accent); font-weight:700; font-family:var(--font-heading);">INITIATING SYSTEM DIAGNOSTICS...</p>
-      <div id="loader-console" style="font-family: monospace; font-size: 0.8rem; color: #b0b0b0; width: 320px; height: 100px; margin: 1.5rem auto 0; text-align: left; background: rgba(0,0,0,0.6); padding: 0.75rem 1rem; border: 1px solid rgba(255,255,255,0.08); border-radius: 4px; overflow: hidden; line-height: 1.4;"></div>
-    </div>
-  </div>
-
-  <!-- Space Background Canvas -->
-  <canvas id="space-canvas"></canvas>
-
-  <!-- Background Image Fallback -->
+  <!-- Background Image -->
   <div class="bg-image"></div>
 
   <!-- Navigation -->
@@ -69,179 +54,141 @@
 
     <!-- HERO -->
     <section class="hero-section" id="home">
-      <div class="hero-content">
-        <div class="mission-badge">QUALIFICATION LEVEL: TRL 4-8</div>
-        <h1>PLANETARY SIMULATION &<br>QUALIFICATION SYSTEM<br><span class="highlight">— REGIME INDIA</span></h1>
+      <div class="hero-content reveal slide-up">
+        <div class="mission-badge">MISSION READINESS</div>
+        <h1>MARS ANALOG<br>TESTING INFRASTRUCTURE<br><span class="highlight">— INDIA</span></h1>
         <p class="hero-desc">
-          Stella Martis operates simulated Martian environments for the qualification of planetary exploration hardware, sensor packages, and autonomous navigation arrays under severe environmental margins.
+          Stella Martis builds and operates environments that replicate conditions on the Martian surface. Space hardware — rovers, drones, sensors, communication systems, autonomy software — is tested here before deployment.
         </p>
         <p class="hero-desc">
-          We operate three integrated facilities in northern India: the Mohali Environmental Simulation Chamber, the Morni Hills Mobility Range, and the Spiti Valley High-Altitude Field Station. These facilities serve as a sequential validation pipeline for space hardware before final mission integration.
+          We operate three facilities in northern India. One indoor laboratory outside Chandigarh. One outdoor terrain range in Morni Hills. One high-altitude field station in Spiti Valley. We also design and build Mars-ready hardware of our own, tested through the same pipeline.
         </p>
         <div class="hero-actions">
-          <a href="#facilities" class="btn btn-secondary">EXPLORE INFRASTRUCTURE</a>
-          <a href="#book" class="btn btn-primary">INITIATE TEST BRIEF</a>
-        </div>
-      </div>
-
-      <!-- Telemetry Dashboard Widget -->
-      <div class="telemetry-dashboard">
-        <div class="telemetry-grid">
-          <div class="telemetry-item">
-            <span class="telemetry-label">Simulation Chamber</span>
-            <span class="telemetry-status"><span class="status-dot"></span>ACTIVE</span>
-          </div>
-          <div class="telemetry-item">
-            <span class="telemetry-label">Chamber Pressure</span>
-            <span id="tel-pressure" class="telemetry-value">0.085 atm</span>
-          </div>
-          <div class="telemetry-item">
-            <span class="telemetry-label">Solar UV Flux</span>
-            <span id="tel-uv" class="telemetry-value">102 W/m²</span>
-          </div>
-          <div class="telemetry-item">
-            <span class="telemetry-label">Atmosphere Simulant</span>
-            <span class="telemetry-value">95.3% CO₂</span>
-          </div>
-          <div class="telemetry-item">
-            <span class="telemetry-label">Core Temperature</span>
-            <span id="tel-temp" class="telemetry-value">243 K (-30°C)</span>
-          </div>
-          <div class="telemetry-item">
-            <span class="telemetry-label">Morni Range Gradient</span>
-            <span class="telemetry-value">31.4° Slope</span>
-          </div>
-          <div class="telemetry-item">
-            <span class="telemetry-label">Spiti Station Elevation</span>
-            <span class="telemetry-value">4,400m ASL</span>
-          </div>
-          <div class="telemetry-item">
-            <span class="telemetry-label">Signal Latency Delay</span>
-            <span id="tel-latency" class="telemetry-value alert">1,240s (Mars)</span>
-          </div>
+          <a href="#facilities" class="btn btn-secondary">EXPLORE FACILITIES</a>
+          <a href="#book" class="btn btn-primary">BOOK A TEST CAMPAIGN</a>
         </div>
       </div>
     </section>
 
     <!-- WHAT WE DO -->
     <section class="info-section" id="what-we-do">
-      <div class="section-header">
-        <h2>QUALIFICATION & FLIGHT CERTIFICATION REGIME</h2>
+      <div class="section-header reveal slide-up">
+        <h2>WHAT WE DO</h2>
         <div class="divider"></div>
       </div>
       <div class="grid-2">
-        <div class="content-card border-top-accent">
-          <h3>1. INDEPENDENT ENVIRONMENTAL QUALIFICATION</h3>
-          <p>Research institutes, aerospace companies, and planetary science teams deploy hardware to our facilities for rigorous environmental qualification. We execute controlled test briefs—simulating low pressure limits, high UV flux, abrasive regolith interaction, and communication dropouts—producing structured qualification dossiers and raw sensor telemetry.</p>
-          <p class="outcome"><strong>Deliverables:</strong> Full environmental verification data, instrument calibrations, and structured engineering qualification reports.</p>
+        <div class="content-card border-top-accent reveal fade-in delay-1">
+          <h3>1. WE TEST OTHER PEOPLE'S HARDWARE</h3>
+          <p>Research institutions, aerospace companies, university programs, and government agencies bring their technology to our facilities. We run it through controlled simulations — low pressure, UV radiation, regolith interaction, signal delay — and document what happens.</p>
+          <p class="outcome"><strong>Outcome:</strong> Clients leave with test data and a technical report.</p>
         </div>
-        <div class="content-card border-top-accent">
-          <h3>2. CO-DEVELOPMENT FLIGHT RESEARCH</h3>
-          <p>In parallel, we research and engineer surface exploration hardware—including low-pressure sensor enclosures, specialized mobility treads, and high-gain antenna arrays—verifying them internally through the same qualification pipeline before final integration.</p>
+        <div class="content-card border-top-accent reveal fade-in delay-2">
+          <h3>2. WE BUILD OUR OWN HARDWARE</h3>
+          <p>We design Mars surface technology — sensors, enclosures, mobility systems, communication tools — and validate them in our own facilities before offering them for mission use.</p>
         </div>
       </div>
     </section>
 
     <!-- FACILITIES -->
     <section class="info-section" id="facilities">
-      <div class="section-header">
-        <h2>INFRASTRUCTURE & SIMULATION FACILITIES</h2>
+      <div class="section-header reveal slide-up">
+        <h2>INFRASTRUCTURE & FACILITIES</h2>
         <div class="divider"></div>
-        <p class="section-intro">Three active facilities operating in sequence to systematically validate space hardware through escalating environmental variables.</p>
+        <p class="section-intro">Three facilities. Used in sequence or independently depending on what you need to test.</p>
       </div>
 
       <!-- Facility 1 -->
-      <div class="facility-panel">
+      <div class="facility-panel reveal slide-up">
         <div class="facility-header">
-          <h3>FACILITY 1 — MOHALI SIMULATION CHAMBER</h3>
-          <span class="location-badge">MOHALI, PUNJAB | OPERATIONAL YEAR-ROUND</span>
+          <h3>FACILITY 1 — INDOOR LABORATORY</h3>
+          <span class="location-badge">MOHALI, PUNJAB | OPEN YEAR-ROUND</span>
         </div>
-        <p class="facility-intro">Designed for laboratory-controlled planetary simulation campaigns. Four physical systems operate inside a single integrated vacuum vessel.</p>
-        <div class="facility-image-wrapper">
+        <p class="facility-intro">This is where most test campaigns begin. Four systems operate inside a single controlled environment.</p>
+        <div class="facility-image-wrapper reveal fade-in">
           <img src="indoor_lab.png" alt="High-tech vacuum chamber in pristine aerospace laboratory" class="facility-image">
         </div>
         <div class="specs-grid">
-          <div class="spec-item">
-            <h4>VACUUM VESSEL (SM-VAC-01)</h4>
+          <div class="spec-item reveal fade-in">
+            <h4>VACUUM CHAMBER</h4>
             <ul>
-              <li><strong>Chamber Volume:</strong> 2.5m × 2m × 2m stainless steel enclosure.</li>
-              <li><strong>Target Pressure:</strong> Achievable down to 0.05 atm.</li>
-              <li><strong>Qualification Margin:</strong> Replicates low pressure states to qualify mechanical seal integrity, thermal dissipation constraints, and electric motor thermal curves under thin atmosphere.</li>
+              <li><strong>Size:</strong> 2.5m × 2m × 2m internal volume.</li>
+              <li><strong>Pressure:</strong> Achievable down to 0.05 atm.</li>
+              <li><strong>Utility:</strong> Mars atmospheric pressure is 0.006 atm. We reach ~0.05–0.10 atm — sufficient to test seal integrity, pressure ratings, motor behaviour in thin atmosphere, and thermal dissipation.</li>
             </ul>
           </div>
-          <div class="spec-item">
-            <h4>REGOLITH SIMULANT BED</h4>
+          <div class="spec-item reveal fade-in delay-1">
+            <h4>REGOLITH BED</h4>
             <ul>
-              <li><strong>Composition:</strong> JSC Mars-1A (NASA standard). Matched to Mars Curiosity surface data.</li>
-              <li><strong>Analytical Validation:</strong> Benchmarked in collaboration with IIT Ropar.</li>
-              <li><strong>Qualification Margin:</strong> High-abrasion drilling profiles, robotic tread slip coefficients, and sample ingestion testing.</li>
+              <li><strong>Mass:</strong> 200 kg floor bed of Mars soil simulant.</li>
+              <li><strong>Composition:</strong> JSC Mars-1A (NASA standard). Matched to Curiosity rover surface data. Validated with IIT Ropar.</li>
+              <li><strong>Utility:</strong> Testing rover treads, drill bits, landing legs, and sampling mechanisms.</li>
             </ul>
           </div>
-          <div class="spec-item">
-            <h4>SOLAR ELECTROMAGNETIC SIMULATOR</h4>
+          <div class="spec-item reveal fade-in delay-2">
+            <h4>UV ARRAY</h4>
             <ul>
-              <li><strong>Emitter Array:</strong> 8–12 high-intensity UV-B and UV-C lamp arrays.</li>
-              <li><strong>Qualification Margin:</strong> Simulates high solar UV flux to verify PCB conformal coating degradation, optical filter refraction changes, and polymer seal integrity.</li>
+              <li><strong>Hardware:</strong> 8–12 UV-B and UV-C lamps covering chamber floor.</li>
+              <li><strong>Utility:</strong> Replicates Mars's ~100x Earth UV flux for material testing (PCB coatings, seals, lenses, solar panels).</li>
             </ul>
           </div>
-          <div class="spec-item">
-            <h4>DEEP SPACE TELEMETRY SIMULATOR</h4>
+          <div class="spec-item reveal fade-in delay-3">
+            <h4>COMMUNICATIONS DELAY SIMULATOR</h4>
             <ul>
-              <li><strong>Signal Latency:</strong> Software-controlled delay scaling from 3 to 20 minutes.</li>
-              <li><strong>Qualification Margin:</strong> Mandatory for autonomous flight array verification. Real-time manual overrides fail under simulated latency cycles.</li>
+              <li><strong>Latency:</strong> Programmable 3 to 20 minutes.</li>
+              <li><strong>Utility:</strong> Tests autonomy. If your system requires real-time human intervention to function, it will fail here.</li>
             </ul>
           </div>
         </div>
       </div>
 
       <!-- Facility 2 -->
-      <div class="facility-panel">
+      <div class="facility-panel reveal slide-up">
         <div class="facility-header">
-          <h3>FACILITY 2 — MORNI HILLS MOBILITY RANGE</h3>
-          <span class="location-badge">MORNI HILLS, HARYANA | OPERATIONAL YEAR-ROUND (DAYTIME)</span>
+          <h3>FACILITY 2 — OUTDOOR TERRAIN RANGE</h3>
+          <span class="location-badge">MORNI HILLS, HARYANA | OPEN YEAR-ROUND, DAYTIME</span>
         </div>
-        <p class="facility-intro">Uneven basalt terrain with natural geological configurations and gradients scaling to 35 degrees. Designed for heavy mobility testing that cannot be simulated under laboratory chamber volumes.</p>
-        <div class="facility-image-wrapper">
+        <p class="facility-intro">Rocky, uneven terrain with natural basalt-rich geology and gradients up to 35 degrees. Used for mobility testing that cannot be conducted indoors.</p>
+        <div class="facility-image-wrapper reveal fade-in">
           <img src="outdoor_range.png" alt="Robotic rover being tested on rocky red terrain" class="facility-image">
         </div>
         <div class="content-box">
-          <h4>INSTRUMENTATION & TESTING PARAMETERS:</h4>
+          <h4>TESTING CAPABILITIES:</h4>
           <ul class="bullet-list">
-            <li>Planetary chassis integrity, suspension kinematics, and high-frequency structural vibration under dynamic loads</li>
-            <li>Autonomous flight telemetry and stability in high-shear winds at low air density</li>
-            <li>Spectral mapping, camera calibrations, and LIDAR profiling over natural rocky basalt formations</li>
-            <li>Long-range autonomous navigation loops and power cell degradation cycles scaling to 4 hours</li>
+            <li>Rover chassis performance on loose and compacted terrain</li>
+            <li>Drone flight stability and terrain-following at moderate altitude</li>
+            <li>Camera and LIDAR mapping over natural surface geology</li>
+            <li>Untethered autonomy runs up to 4 hours</li>
           </ul>
-          <p class="note"><em>Technical Note: This is an active aerospace test range. Client engineering teams operate payload systems; Stella Martis engineers capture instrumentation logs.</em></p>
+          <p class="note"><em>Note: This is a working test range, not a demonstration site. Client teams operate their own hardware. Our engineers log instrumentation data.</em></p>
         </div>
       </div>
 
       <!-- Facility 3 -->
-      <div class="facility-panel">
+      <div class="facility-panel reveal slide-up">
         <div class="facility-header">
-          <h3>FACILITY 3 — SPITI VALLEY HIGH-ALTITUDE FIELD STATION</h3>
+          <h3>FACILITY 3 — SPITI VALLEY FIELD STATION</h3>
           <span class="location-badge">SPITI VALLEY, HIMACHAL PRADESH | OPEN JUNE TO SEPTEMBER</span>
         </div>
-        <p class="facility-intro">Operating at an elevation of 4,400 to 4,800 meters above sea level (ASL), this station provides an atmospheric analog with direct solar radiation and cold desert volcanic geology.</p>
-        <div class="facility-image-wrapper">
+        <p class="facility-intro">Elevation: 4,400 – 4,800 metres ASL. A deployable outpost acting as base infrastructure (converted shipping container) for prep and workspace.</p>
+        <div class="facility-image-wrapper reveal fade-in">
           <img src="spiti_station.png" alt="High-altitude research station in desert mountain landscape" class="facility-image">
         </div>
         
         <div class="grid-2" style="margin-top: 1.5rem;">
-          <div class="content-box">
-            <h4>ENVIRONMENTAL CHARACTERISTICS:</h4>
+          <div class="content-box reveal fade-in">
+            <h4>WHY SPITI:</h4>
             <ul class="bullet-list">
-              <li><strong>Atmospheric Pressure:</strong> Sustained 0.55 – 0.60 atm</li>
-              <li><strong>Thermal Ranges:</strong> 263 K (−10°C) overnight to 291 K (+18°C) midday</li>
-              <li><strong>UV Irradiation:</strong> Enhanced solar flux with minimal atmospheric filtration</li>
-              <li><strong>Geomorphology:</strong> Active cold desert, basalt-dominated geology, and absolute vegetation-free profiles</li>
-              <li><strong>Flight Corridor:</strong> 1.5 km unobstructed flight corridor for high-altitude drone research</li>
+              <li><strong>Pressure:</strong> Natural atmospheric pressure at altitude: 0.55 – 0.60 atm</li>
+              <li><strong>Temperature:</strong> −10°C overnight to +18°C midday during season</li>
+              <li><strong>UV Exposure:</strong> 8–10 hours daily with minimal atmospheric filtration</li>
+              <li><strong>Terrain:</strong> Cold desert, volcanic geology, no vegetation</li>
+              <li><strong>Flight:</strong> Drone corridor: 1.5 km unobstructed flight range</li>
             </ul>
           </div>
-          <div class="content-box accent-box">
-            <h4>SPITI QUALIFICATION EXPEDITIONS</h4>
-            <p>Sustained two-week environmental campaigns. Technical teams deploy to the station to run hardware through diurnal cycles. We manage logistics, monitor telemetry, and supply engineering dossiers. Scientific co-authorship available for research findings.</p>
-            <p class="pricing"><strong>Qualification Budget:</strong> Campaigns scale from ₹5L to ₹10L based on payload dimensions and telemetry profiles.</p>
+          <div class="content-box accent-box reveal fade-in delay-1">
+            <h4>THE SPITI EXPEDITION</h4>
+            <p>Our two-week field campaign. Client team travels to site. Hardware runs through daily test cycles. Data is logged, documented, and compiled into a technical report. Research paper co-authorship is available.</p>
+            <p class="pricing"><strong>Pricing:</strong> ₹5L – ₹10L depending on team size and equipment.</p>
           </div>
         </div>
       </div>
@@ -249,37 +196,37 @@
 
     <!-- PROCESS -->
     <section class="info-section" id="how-it-works">
-      <div class="section-header">
-        <h2>QUALIFICATION WORKFLOW PIPELINE</h2>
+      <div class="section-header reveal slide-up">
+        <h2>HOW TESTING WORKS</h2>
         <div class="divider"></div>
       </div>
       <div class="process-steps">
-        <div class="step">
-          <div class="step-num">PHASE 1</div>
+        <div class="step reveal scale-in">
+          <div class="step-num">STEP 1</div>
           <div class="step-content">
-            <h4>TEST BRIEF SUBMISSION</h4>
-            <p>Submit mechanical specs, sensor requirements, and target environmental envelopes through our digital brief portal.</p>
+            <h4>SUBMIT A TEST BRIEF</h4>
+            <p>Tell us what you're testing, what conditions matter, and what data you need. Use the form on our contact page or email us directly.</p>
           </div>
         </div>
-        <div class="step">
-          <div class="step-num">PHASE 2</div>
+        <div class="step reveal scale-in delay-1">
+          <div class="step-num">STEP 2</div>
           <div class="step-content">
-            <h4>ENVIRONMENTAL SCORING</h4>
-            <p>Our aerospace engineering team models your system requirements against chamber parameters to structure a qualification schedule.</p>
+            <h4>WE SCOPE THE CAMPAIGN</h4>
+            <p>We review your hardware specs and define which facilities and systems apply. We send back a campaign plan with timeline, cost, and deliverables.</p>
           </div>
         </div>
-        <div class="step">
-          <div class="step-num">PHASE 3</div>
+        <div class="step reveal scale-in delay-2">
+          <div class="step-num">STEP 3</div>
           <div class="step-content">
-            <h4>QUALIFICATION EXECUTION</h4>
-            <p>Hardware is integrated into laboratory or high-altitude systems. We handle environmental controls and log real-time sensor streams.</p>
+            <h4>CAMPAIGN EXECUTION</h4>
+            <p>Your team brings hardware to our facility. Our engineers set up and monitor all simulation systems. You operate your hardware. We log everything.</p>
           </div>
         </div>
-        <div class="step">
-          <div class="step-num">PHASE 4</div>
+        <div class="step reveal scale-in delay-3">
+          <div class="step-num">STEP 4</div>
           <div class="step-content">
-            <h4>TELEMETRY & DOSSIER</h4>
-            <p>Stella Martis compiles all raw telemetry logs and delivers a certified engineering qualification report.</p>
+            <h4>DATA AND REPORT</h4>
+            <p>You receive raw test data and a structured technical report. If publishable findings emerge, we discuss co-authorship.</p>
           </div>
         </div>
       </div>
@@ -287,81 +234,81 @@
 
     <!-- RESEARCH & PARTNERS -->
     <section class="info-section" id="research">
-      <div class="section-header">
+      <div class="section-header reveal slide-up">
         <h2>RESEARCH & COLLABORATION</h2>
         <div class="divider"></div>
       </div>
-      <div class="content-card">
-        <p>Stella Martis maintains a parallel research track in environmental analogs and surface exploration kinematics. We publish findings arising from internal flight systems research and collaborative academic campaigns.</p>
+      <div class="content-card reveal fade-in">
+        <p>Stella Martis maintains a research program parallel to its testing operations. We publish findings from both client campaigns (with permission) and our own hardware development work.</p>
         
-        <h4 style="margin-top:1.5rem; margin-bottom:0.5rem;">ACTIVE RESEARCH AREAS:</h4>
+        <h4 style="margin-top:1.5rem; margin-bottom:0.5rem;">CURRENT RESEARCH AREAS:</h4>
         <ul class="bullet-list">
-          <li>Mineralogical composition and physical mechanics of planetary soil simulants</li>
-          <li>Low-pressure semiconductor thermal curves under sub-0.1 atm carbon dioxide environments</li>
-          <li>Intertial autonomous navigation under severe communication latencies</li>
-          <li>Combined UV and thermal fatigue profiling on polymer seals and PCB coatings</li>
+          <li>Mars regolith simulant composition and fidelity benchmarking</li>
+          <li>Electronics performance characterisation in sub-0.1 atm environments</li>
+          <li>Autonomous navigation under communication delay constraints</li>
+          <li>Hardware degradation under combined UV and thermal cycling conditions</li>
         </ul>
         
-        <p style="margin-top:1.5rem;"><strong>Academic Affiliation:</strong> Simulant compositions benchmarked in collaboration with IIT Ropar. We support collaborative campaigns with international space programs, university payloads, and independent developers.</p>
+        <p style="margin-top:1.5rem;"><strong>Academic Partners:</strong> IIT Ropar (geology validation). We are open to research collaborations with universities, ISRO centres, and independent research groups.</p>
       </div>
 
       <div class="section-header" style="margin-top: 4rem;">
-        <h2>COLLABORATING ENTITIES</h2>
-        <div class="divider"></div>
+        <h2 class="reveal slide-up">WHO WE WORK WITH</h2>
+        <div class="divider reveal slide-up"></div>
       </div>
       <div class="partners-grid">
-        <div class="partner-item">Academic Aerospace and Planetary Science Research Teams</div>
-        <div class="partner-item">Private Space Flight Hardware Startups</div>
-        <div class="partner-item">Governmental Planetary Exploration Facilities</div>
-        <div class="partner-item">Military Sensor and Telecommand Labs</div>
-        <div class="partner-item">International Flight Hardware Developers</div>
+        <div class="partner-item reveal scale-in">University aerospace and robotics engineering departments</div>
+        <div class="partner-item reveal scale-in delay-1">Private space companies developing Mars surface hardware</div>
+        <div class="partner-item reveal scale-in delay-2">ISRO and affiliated research centres</div>
+        <div class="partner-item reveal scale-in delay-3">Defence and government agencies requiring planetary simulation</div>
+        <div class="partner-item reveal scale-in delay-4">International space hardware manufacturers seeking India-based testing</div>
       </div>
     </section>
 
     <!-- BOOKING -->
     <section class="info-section" id="book">
-      <div class="section-header">
-        <h2>INITIATE QUALIFICATION CAMPAIGN</h2>
+      <div class="section-header reveal slide-up">
+        <h2>BOOK A CAMPAIGN</h2>
         <div class="divider"></div>
-        <p class="section-intro">Submit a campaign proposal to initiate the mechanical and environmental scoping process. Our engineering team will compile a custom simulation outline and budget analysis.</p>
+        <p class="section-intro">To start a test campaign, fill out the brief below or email us at <strong>contact@stellamartis.in</strong>. We respond within 48 hours with a campaign outline and cost estimate.</p>
       </div>
       
-      <div class="content-card">
+      <div class="content-card reveal slide-up">
         <form class="agency-form">
           <div class="form-row">
             <div class="form-group">
-              <label for="org-name">ORGANIZATION / TEAM NAME</label>
-              <input type="text" id="org-name" placeholder="Enter organization name" required>
+              <label>ORGANIZATION / TEAM NAME</label>
+              <input type="text" placeholder="Enter organization name">
             </div>
             <div class="form-group">
-              <label for="contact-email">CONTACT EMAIL</label>
-              <input type="email" id="contact-email" placeholder="Enter email address" required>
+              <label>CONTACT EMAIL</label>
+              <input type="email" placeholder="Enter email address">
             </div>
           </div>
           <div class="form-group">
-            <label for="hardware-test">HARDWARE TO BE TESTED</label>
-            <textarea rows="3" id="hardware-test" placeholder="Describe the hardware (e.g. rover chassis, sensors, etc.)" required></textarea>
+            <label>HARDWARE TO BE TESTED</label>
+            <textarea rows="3" placeholder="Describe the hardware (e.g. rover chassis, sensors, etc.)"></textarea>
           </div>
           <div class="form-group">
-            <label for="test-conditions">CRITICAL TEST CONDITIONS</label>
-            <input type="text" id="test-conditions" placeholder="e.g. Pressure, UV, Regolith, Comms delay, Terrain, Combination">
+            <label>CRITICAL TEST CONDITIONS</label>
+            <input type="text" placeholder="e.g. Pressure, UV, Regolith, Comms delay, Terrain, Combination">
           </div>
           <div class="form-row">
             <div class="form-group">
-              <label for="timeline">PREFERRED TIMELINE</label>
-              <input type="text" id="timeline" placeholder="e.g. Q4 2026">
+              <label>PREFERRED TIMELINE</label>
+              <input type="text" placeholder="e.g. Q4 2026">
             </div>
             <div class="form-group">
-              <label for="deliverables">DELIVERABLES REQUIRED</label>
-              <select id="deliverables">
+              <label>DELIVERABLES REQUIRED</label>
+              <select>
                 <option>Research Report & Raw Data</option>
                 <option>Raw Data Only</option>
               </select>
             </div>
           </div>
           <div class="form-group">
-            <label for="spiti-travel">SPITI TRAVEL (IF APPLICABLE)</label>
-            <input type="text" id="spiti-travel" placeholder="Team size if travelling to Spiti Valley">
+            <label>SPITI TRAVEL (IF APPLICABLE)</label>
+            <input type="text" placeholder="Team size if travelling to Spiti Valley">
           </div>
           <button type="submit" class="btn btn-primary btn-block">SUBMIT CAMPAIGN BRIEF</button>
         </form>
@@ -371,25 +318,105 @@
     <!-- FOOTER -->
     <footer class="site-footer">
       <div class="footer-grid">
-        <div class="footer-info">
+        <div class="footer-info reveal fade-in">
           <div class="logo-mark" style="font-size: 2rem; margin-bottom: 1rem;">SM</div>
           <h4>STELLA MARTIS</h4>
           <p>Private aerospace infrastructure and research company based in Chandigarh, India. Registered under IN-SPACe guidelines and operating under applicable research and safety standards.</p>
           <p>Our team combines backgrounds in aerospace engineering, materials science, embedded systems, and planetary geology.</p>
         </div>
-        <div class="footer-mission">
-          <h4>OPERATIONAL MANDATE</h4>
-          <p>Stella Martis establishes high-fidelity physical analogs to bridge the gap between laboratory instrumentation and active planetary deployment. We qualify sub-systems under planetary margin parameters to certify orbital and surface readiness.</p>
+        <div class="footer-mission reveal fade-in delay-1">
+          <h4>OUR ORIGIN</h4>
+          <p>We built Stella Martis because the infrastructure didn't exist. India has the engineering talent and the institutional momentum to contribute seriously to Mars exploration. The missing piece was a place to test the hardware. We are building that place.</p>
           <p class="disclaimer">All technical specifications subject to update as facilities expand. Current specs reflect Phase 1 operational status.</p>
         </div>
       </div>
       <div class="footer-bottom">
-        <p>&copy; 2026 Stella Martis. Environmental Simulation Facility. Document Ref: SM-TRL-REG-2026.</p>
+        <p>&copy; 2026 Stella Martis. All systems nominal.</p>
       </div>
     </footer>
 
   </main>
 
-  <script src="main.js"></script>
+  <script>
+    // --- Mobile Menu Toggle ---
+    const mobileToggle = document.getElementById('mobile-toggle');
+    const mainNav = document.getElementById('main-nav');
+    const navLinks = document.querySelectorAll('.main-nav a');
+    const header = document.getElementById('header');
+
+    mobileToggle.addEventListener('click', () => {
+      mobileToggle.classList.toggle('active');
+      mainNav.classList.toggle('active');
+      header.classList.toggle('menu-open');
+    });
+
+    // Close menu when clicking a link
+    navLinks.forEach(link => {
+      link.addEventListener('click', () => {
+        mobileToggle.classList.remove('active');
+        mainNav.classList.remove('active');
+        header.classList.remove('menu-open');
+      });
+    });
+
+    // --- Smooth scrolling ---
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+      anchor.addEventListener('click', function (e) {
+        e.preventDefault();
+        const target = document.querySelector(this.getAttribute('href'));
+        if (target) {
+          const headerOffset = 80;
+          const elementPosition = target.getBoundingClientRect().top;
+          const offsetPosition = elementPosition + window.pageYOffset - headerOffset;
+          
+          window.scrollTo({
+            top: offsetPosition,
+            behavior: "smooth"
+          });
+        }
+      });
+    });
+
+    // --- Scroll Animations (Intersection Observer) ---
+    const revealElements = document.querySelectorAll('.reveal');
+
+    const revealOptions = {
+      threshold: 0.15, // Trigger when 15% visible
+      rootMargin: "0px 0px -50px 0px"
+    };
+
+    const revealOnScroll = new IntersectionObserver(function(entries, observer) {
+      entries.forEach(entry => {
+        if (!entry.isIntersecting) {
+          return;
+        } else {
+          entry.target.classList.add('visible');
+          // Optional: Stop observing once revealed
+          // observer.unobserve(entry.target);
+        }
+      });
+    }, revealOptions);
+
+    revealElements.forEach(el => {
+      revealOnScroll.observe(el);
+    });
+
+    // --- Form submission demo ---
+    document.querySelector('.agency-form').addEventListener('submit', (e) => {
+      e.preventDefault();
+      const btn = e.target.querySelector('button');
+      const originalText = btn.textContent;
+      btn.textContent = 'TRANSMITTING...';
+      setTimeout(() => {
+        btn.textContent = 'BRIEF RECEIVED';
+        btn.style.backgroundColor = '#2e7d32';
+        setTimeout(() => {
+          btn.textContent = originalText;
+          btn.style.backgroundColor = '';
+          e.target.reset();
+        }, 3000);
+      }, 1500);
+    });
+  </script>
 </body>
 </html>
