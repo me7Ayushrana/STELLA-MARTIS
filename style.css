@@ -512,6 +512,81 @@ a:hover {
   color: #fff;
 }
 
+/* Form Validation & Error Messages */
+.form-error {
+  display: block;
+  color: #ff6b6b;
+  font-size: 0.85rem;
+  margin-top: 0.25rem;
+  min-height: 1.2rem;
+}
+
+.form-group input.error,
+.form-group textarea.error,
+.form-group select.error {
+  border-color: #ff6b6b;
+  background: rgba(255, 107, 107, 0.05);
+}
+
+.form-message {
+  padding: 1rem;
+  margin-bottom: 1.5rem;
+  border-radius: 4px;
+  font-size: 0.95rem;
+  text-align: center;
+  border: 1px solid;
+  animation: slideDown 0.3s ease;
+}
+
+.form-message.success {
+  background: rgba(46, 204, 113, 0.1);
+  border-color: #2ecc71;
+  color: #2ecc71;
+}
+
+.form-message.error {
+  background: rgba(255, 107, 107, 0.1);
+  border-color: #ff6b6b;
+  color: #ff6b6b;
+}
+
+.form-message.loading {
+  background: rgba(52, 152, 219, 0.1);
+  border-color: #3498db;
+  color: #3498db;
+}
+
+@keyframes slideDown {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+#submit-btn {
+  transition: all 0.3s ease;
+  min-height: 50px;
+  font-weight: 500;
+  letter-spacing: 0.05em;
+}
+
+#submit-btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+#submit-btn.loading {
+  background-color: #3498db;
+}
+
+#submit-btn.success {
+  background-color: #2ecc71;
+}
+
 /* ---------- Footer ---------- */
 .site-footer {
   background: #000;

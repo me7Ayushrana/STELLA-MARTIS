@@ -274,43 +274,82 @@
       </div>
       
       <div class="content-card reveal slide-up">
-        <form class="agency-form">
+        <form class="agency-form" id="campaign-form">
+          <!-- Status Messages -->
+          <div id="form-message" class="form-message" style="display: none;"></div>
+
           <div class="form-row">
             <div class="form-group">
-              <label>ORGANIZATION / TEAM NAME</label>
-              <input type="text" placeholder="Enter organization name">
+              <label for="organization">ORGANIZATION / TEAM NAME</label>
+              <input 
+                type="text" 
+                id="organization" 
+                name="organization"
+                placeholder="Enter organization name"
+                required
+              >
+              <span class="form-error" id="error-organization"></span>
             </div>
             <div class="form-group">
-              <label>CONTACT EMAIL</label>
-              <input type="email" placeholder="Enter email address">
+              <label for="email">CONTACT EMAIL</label>
+              <input 
+                type="email" 
+                id="email" 
+                name="email"
+                placeholder="Enter email address"
+                required
+              >
+              <span class="form-error" id="error-email"></span>
             </div>
           </div>
           <div class="form-group">
-            <label>HARDWARE TO BE TESTED</label>
-            <textarea rows="3" placeholder="Describe the hardware (e.g. rover chassis, sensors, etc.)"></textarea>
+            <label for="hardware">HARDWARE TO BE TESTED</label>
+            <textarea 
+              rows="3" 
+              id="hardware" 
+              name="hardware"
+              placeholder="Describe the hardware (e.g. rover chassis, sensors, etc.)"
+              required
+            ></textarea>
+            <span class="form-error" id="error-hardware"></span>
           </div>
           <div class="form-group">
-            <label>CRITICAL TEST CONDITIONS</label>
-            <input type="text" placeholder="e.g. Pressure, UV, Regolith, Comms delay, Terrain, Combination">
+            <label for="testConditions">CRITICAL TEST CONDITIONS</label>
+            <input 
+              type="text" 
+              id="testConditions" 
+              name="testConditions"
+              placeholder="e.g. Pressure, UV, Regolith, Comms delay, Terrain, Combination"
+            >
           </div>
           <div class="form-row">
             <div class="form-group">
-              <label>PREFERRED TIMELINE</label>
-              <input type="text" placeholder="e.g. Q4 2026">
+              <label for="timeline">PREFERRED TIMELINE</label>
+              <input 
+                type="text" 
+                id="timeline" 
+                name="timeline"
+                placeholder="e.g. Q4 2026"
+              >
             </div>
             <div class="form-group">
-              <label>DELIVERABLES REQUIRED</label>
-              <select>
-                <option>Research Report & Raw Data</option>
-                <option>Raw Data Only</option>
+              <label for="deliverables">DELIVERABLES REQUIRED</label>
+              <select id="deliverables" name="deliverables">
+                <option value="Research Report & Raw Data">Research Report & Raw Data</option>
+                <option value="Raw Data Only">Raw Data Only</option>
               </select>
             </div>
           </div>
           <div class="form-group">
-            <label>SPITI TRAVEL (IF APPLICABLE)</label>
-            <input type="text" placeholder="Team size if travelling to Spiti Valley">
+            <label for="spitiTravel">SPITI TRAVEL (IF APPLICABLE)</label>
+            <input 
+              type="text" 
+              id="spitiTravel" 
+              name="spitiTravel"
+              placeholder="Team size if travelling to Spiti Valley"
+            >
           </div>
-          <button type="submit" class="btn btn-primary btn-block">SUBMIT CAMPAIGN BRIEF</button>
+          <button type="submit" class="btn btn-primary btn-block" id="submit-btn">SUBMIT CAMPAIGN BRIEF</button>
         </form>
       </div>
     </section>
@@ -401,22 +440,9 @@
       revealOnScroll.observe(el);
     });
 
-    // --- Form submission demo ---
-    document.querySelector('.agency-form').addEventListener('submit', (e) => {
-      e.preventDefault();
-      const btn = e.target.querySelector('button');
-      const originalText = btn.textContent;
-      btn.textContent = 'TRANSMITTING...';
-      setTimeout(() => {
-        btn.textContent = 'BRIEF RECEIVED';
-        btn.style.backgroundColor = '#2e7d32';
-        setTimeout(() => {
-          btn.textContent = originalText;
-          btn.style.backgroundColor = '';
-          e.target.reset();
-        }, 3000);
-      }, 1500);
-    });
   </script>
+
+  <!-- Campaign Form Handler -->
+  <script src="form-handler.js"></script>
 </body>
 </html>

@@ -1,0 +1,14 @@
+[
+  {
+    "id": "CAMP-1780325537927",
+    "organization": "Test University",
+    "email": "test@university.edu",
+    "hardware": "Experimental Mars rover with autonomous navigation",
+    "testConditions": "Pressure and UV radiation",
+    "timeline": "Q2 2026",
+    "deliverables": "Research Report & Raw Data",
+    "spitiTravel": "8 researchers",
+    "submittedAt": "2026-06-01T14:52:17.927Z",
+    "status": "pending"
+  }
+]

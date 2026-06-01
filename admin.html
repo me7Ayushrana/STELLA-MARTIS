@@ -1,0 +1,487 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Stella Martis - Campaign Admin Dashboard</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Roboto', Arial, sans-serif;
+      background: #0a0e27;
+      color: #f4f4f4;
+      line-height: 1.6;
+    }
+
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 2rem;
+    }
+
+    header {
+      background: linear-gradient(135deg, #d85c32 0%, #a63f1c 100%);
+      padding: 2rem;
+      border-radius: 8px;
+      margin-bottom: 2rem;
+    }
+
+    header h1 {
+      font-size: 2rem;
+      margin-bottom: 0.5rem;
+    }
+
+    header p {
+      font-size: 0.95rem;
+      opacity: 0.9;
+    }
+
+    .stats {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 1rem;
+      margin-bottom: 2rem;
+    }
+
+    .stat-card {
+      background: rgba(30, 30, 35, 0.9);
+      padding: 1.5rem;
+      border-radius: 8px;
+      border-left: 4px solid #d85c32;
+    }
+
+    .stat-card h3 {
+      font-size: 0.9rem;
+      color: #b0b0b0;
+      text-transform: uppercase;
+      margin-bottom: 0.5rem;
+    }
+
+    .stat-card .number {
+      font-size: 2rem;
+      font-weight: bold;
+      color: #d85c32;
+    }
+
+    .campaigns-section {
+      background: rgba(30, 30, 35, 0.9);
+      border-radius: 8px;
+      padding: 2rem;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+    }
+
+    .campaigns-section h2 {
+      margin-bottom: 1.5rem;
+      font-size: 1.5rem;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+
+    .loading {
+      text-align: center;
+      padding: 2rem;
+      color: #b0b0b0;
+    }
+
+    .spinner {
+      display: inline-block;
+      width: 40px;
+      height: 40px;
+      border: 4px solid rgba(216, 92, 50, 0.2);
+      border-top-color: #d85c32;
+      border-radius: 50%;
+      animation: spin 1s linear infinite;
+    }
+
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
+
+    .error {
+      background: rgba(255, 107, 107, 0.1);
+      border-left: 4px solid #ff6b6b;
+      padding: 1rem;
+      border-radius: 4px;
+      color: #ff6b6b;
+      margin-bottom: 1rem;
+    }
+
+    .campaign-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 1rem;
+    }
+
+    .campaign-table th {
+      background: rgba(0, 0, 0, 0.3);
+      padding: 1rem;
+      text-align: left;
+      font-weight: 600;
+      text-transform: uppercase;
+      font-size: 0.85rem;
+      letter-spacing: 0.05em;
+      border-bottom: 2px solid #d85c32;
+    }
+
+    .campaign-table td {
+      padding: 1rem;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    }
+
+    .campaign-table tr:hover {
+      background: rgba(216, 92, 50, 0.05);
+    }
+
+    .campaign-id {
+      font-family: 'Courier New', monospace;
+      font-size: 0.85rem;
+      color: #d85c32;
+      font-weight: 600;
+    }
+
+    .status-badge {
+      display: inline-block;
+      padding: 0.25rem 0.75rem;
+      border-radius: 20px;
+      font-size: 0.8rem;
+      font-weight: 600;
+      text-transform: uppercase;
+    }
+
+    .status-pending {
+      background: rgba(100, 150, 200, 0.2);
+      color: #64a8e8;
+      border: 1px solid rgba(100, 150, 200, 0.5);
+    }
+
+    .status-approved {
+      background: rgba(46, 204, 113, 0.2);
+      color: #2ecc71;
+      border: 1px solid rgba(46, 204, 113, 0.5);
+    }
+
+    .status-rejected {
+      background: rgba(255, 107, 107, 0.2);
+      color: #ff6b6b;
+      border: 1px solid rgba(255, 107, 107, 0.5);
+    }
+
+    .campaign-details {
+      max-width: 400px;
+      color: #b0b0b0;
+      font-size: 0.9rem;
+    }
+
+    .expand-btn {
+      background: transparent;
+      border: 1px solid #d85c32;
+      color: #d85c32;
+      padding: 0.5rem 1rem;
+      border-radius: 4px;
+      cursor: pointer;
+      font-size: 0.85rem;
+      transition: all 0.2s;
+    }
+
+    .expand-btn:hover {
+      background: #d85c32;
+      color: #fff;
+    }
+
+    .modal {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: rgba(0, 0, 0, 0.8);
+      z-index: 1000;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .modal.active {
+      display: flex;
+    }
+
+    .modal-content {
+      background: #1a1a20;
+      border: 1px solid #d85c32;
+      padding: 2rem;
+      border-radius: 8px;
+      max-width: 500px;
+      max-height: 90vh;
+      overflow-y: auto;
+    }
+
+    .modal-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 1.5rem;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+      padding-bottom: 1rem;
+    }
+
+    .modal-header h2 {
+      font-size: 1.3rem;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+
+    .close-btn {
+      background: none;
+      border: none;
+      color: #d85c32;
+      font-size: 1.5rem;
+      cursor: pointer;
+    }
+
+    .detail-row {
+      margin-bottom: 1rem;
+    }
+
+    .detail-label {
+      color: #d85c32;
+      font-weight: 600;
+      font-size: 0.85rem;
+      text-transform: uppercase;
+      margin-bottom: 0.25rem;
+    }
+
+    .detail-value {
+      color: #f4f4f4;
+      word-break: break-word;
+    }
+
+    .empty-state {
+      text-align: center;
+      padding: 3rem 2rem;
+      color: #b0b0b0;
+    }
+
+    .empty-state-icon {
+      font-size: 3rem;
+      margin-bottom: 1rem;
+      opacity: 0.5;
+    }
+
+    @media (max-width: 768px) {
+      .campaign-table {
+        font-size: 0.85rem;
+      }
+
+      .campaign-table th,
+      .campaign-table td {
+        padding: 0.75rem 0.5rem;
+      }
+
+      .expand-btn {
+        padding: 0.4rem 0.7rem;
+        font-size: 0.75rem;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <header>
+      <h1>CAMPAIGN MANAGEMENT DASHBOARD</h1>
+      <p>Monitor and manage all incoming test campaign requests</p>
+    </header>
+
+    <div class="stats">
+      <div class="stat-card">
+        <h3>Total Campaigns</h3>
+        <div class="number" id="total-count">0</div>
+      </div>
+      <div class="stat-card">
+        <h3>Pending</h3>
+        <div class="number" id="pending-count">0</div>
+      </div>
+      <div class="stat-card">
+        <h3>Approved</h3>
+        <div class="number" id="approved-count">0</div>
+      </div>
+      <div class="stat-card">
+        <h3>Rejected</h3>
+        <div class="number" id="rejected-count">0</div>
+      </div>
+    </div>
+
+    <div class="campaigns-section">
+      <h2>All Campaigns</h2>
+      <div id="content">
+        <div class="loading">
+          <div class="spinner"></div>
+          <p>Loading campaigns...</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Campaign Details Modal -->
+  <div id="campaign-modal" class="modal">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h2>Campaign Details</h2>
+        <button class="close-btn" onclick="closeModal()">&times;</button>
+      </div>
+      <div id="modal-body"></div>
+    </div>
+  </div>
+
+  <script>
+    async function loadCampaigns() {
+      try {
+        const response = await fetch('/api/campaigns');
+        const campaigns = await response.json();
+
+        console.log('[v0] Loaded campaigns:', campaigns.length);
+
+        // Calculate stats
+        const stats = {
+          total: campaigns.length,
+          pending: campaigns.filter(c => c.status === 'pending').length,
+          approved: campaigns.filter(c => c.status === 'approved').length,
+          rejected: campaigns.filter(c => c.status === 'rejected').length,
+        };
+
+        // Update stats
+        document.getElementById('total-count').textContent = stats.total;
+        document.getElementById('pending-count').textContent = stats.pending;
+        document.getElementById('approved-count').textContent = stats.approved;
+        document.getElementById('rejected-count').textContent = stats.rejected;
+
+        // Render table
+        const contentDiv = document.getElementById('content');
+
+        if (campaigns.length === 0) {
+          contentDiv.innerHTML = `
+            <div class="empty-state">
+              <div class="empty-state-icon">📭</div>
+              <p>No campaigns submitted yet.</p>
+            </div>
+          `;
+          return;
+        }
+
+        let html = '<table class="campaign-table"><thead><tr>';
+        html += '<th>Campaign ID</th>';
+        html += '<th>Organization</th>';
+        html += '<th>Email</th>';
+        html += '<th>Hardware</th>';
+        html += '<th>Status</th>';
+        html += '<th>Date</th>';
+        html += '<th>Action</th>';
+        html += '</tr></thead><tbody>';
+
+        campaigns.forEach(campaign => {
+          const date = new Date(campaign.submittedAt).toLocaleDateString();
+          html += `<tr>`;
+          html += `<td><span class="campaign-id">${campaign.id}</span></td>`;
+          html += `<td>${campaign.organization}</td>`;
+          html += `<td><a href="mailto:${campaign.email}" style="color: #d85c32; text-decoration: underline;">${campaign.email}</a></td>`;
+          html += `<td><div class="campaign-details">${campaign.hardware.substring(0, 50)}...</div></td>`;
+          html += `<td><span class="status-badge status-${campaign.status}">${campaign.status}</span></td>`;
+          html += `<td>${date}</td>`;
+          html += `<td><button class="expand-btn" onclick="viewCampaign('${campaign.id}')">View</button></td>`;
+          html += `</tr>`;
+        });
+
+        html += '</tbody></table>';
+        contentDiv.innerHTML = html;
+      } catch (error) {
+        console.error('[v0] Error loading campaigns:', error);
+        document.getElementById('content').innerHTML = `
+          <div class="error">
+            Failed to load campaigns: ${error.message}
+          </div>
+        `;
+      }
+    }
+
+    async function viewCampaign(campaignId) {
+      try {
+        const response = await fetch(`/api/campaigns/${campaignId}`);
+        const campaign = await response.json();
+
+        const date = new Date(campaign.submittedAt).toLocaleString();
+
+        let html = `
+          <div class="detail-row">
+            <div class="detail-label">Campaign ID</div>
+            <div class="detail-value"><code>${campaign.id}</code></div>
+          </div>
+          <div class="detail-row">
+            <div class="detail-label">Organization</div>
+            <div class="detail-value">${campaign.organization}</div>
+          </div>
+          <div class="detail-row">
+            <div class="detail-label">Contact Email</div>
+            <div class="detail-value"><a href="mailto:${campaign.email}" style="color: #d85c32; text-decoration: underline;">${campaign.email}</a></div>
+          </div>
+          <div class="detail-row">
+            <div class="detail-label">Hardware</div>
+            <div class="detail-value">${campaign.hardware}</div>
+          </div>
+          <div class="detail-row">
+            <div class="detail-label">Test Conditions</div>
+            <div class="detail-value">${campaign.testConditions}</div>
+          </div>
+          <div class="detail-row">
+            <div class="detail-label">Timeline</div>
+            <div class="detail-value">${campaign.timeline}</div>
+          </div>
+          <div class="detail-row">
+            <div class="detail-label">Deliverables</div>
+            <div class="detail-value">${campaign.deliverables}</div>
+          </div>
+          <div class="detail-row">
+            <div class="detail-label">Spiti Travel</div>
+            <div class="detail-value">${campaign.spitiTravel}</div>
+          </div>
+          <div class="detail-row">
+            <div class="detail-label">Submitted</div>
+            <div class="detail-value">${date}</div>
+          </div>
+          <div class="detail-row">
+            <div class="detail-label">Status</div>
+            <div class="detail-value">
+              <span class="status-badge status-${campaign.status}">${campaign.status}</span>
+            </div>
+          </div>
+        `;
+
+        document.getElementById('modal-body').innerHTML = html;
+        document.getElementById('campaign-modal').classList.add('active');
+      } catch (error) {
+        alert('Error loading campaign details: ' + error.message);
+      }
+    }
+
+    function closeModal() {
+      document.getElementById('campaign-modal').classList.remove('active');
+    }
+
+    // Close modal when clicking outside
+    document.getElementById('campaign-modal').addEventListener('click', (e) => {
+      if (e.target.id === 'campaign-modal') {
+        closeModal();
+      }
+    });
+
+    // Load campaigns on page load
+    loadCampaigns();
+
+    // Refresh every 30 seconds
+    setInterval(loadCampaigns, 30000);
+  </script>
+</body>
+</html>
