@@ -54,6 +54,7 @@ document.addEventListener("DOMContentLoaded", () => {
   const updateId = document.getElementById("update-id");
   const updateStatus = document.getElementById("update-status");
   const updateReport = document.getElementById("update-report");
+  const btnDeleteRequest = document.getElementById("btn-delete-request");
 
   const detailOrgTitle = document.getElementById("detail-org-title");
   const detailEmail = document.getElementById("detail-email");
@@ -426,5 +427,53 @@ document.addEventListener("DOMContentLoaded", () => {
       }, 1000);
     }
   });
+
+  // Handle Delete Request Action
+  if (btnDeleteRequest) {
+    btnDeleteRequest.addEventListener("click", async () => {
+      const id = updateId.value;
+      const orgName = detailOrgTitle.textContent;
+      
+      if (!confirm(`Are you absolutely sure you want to permanently delete the campaign request from "${orgName}"? This action cannot be undone.`)) {
+        return;
+      }
+
+      const originalText = btnDeleteRequest.textContent;
+      btnDeleteRequest.textContent = "DELETING...";
+      btnDeleteRequest.disabled = true;
+
+      if (isSupabaseConfigured()) {
+        try {
+          const { error } = await supabase
+            .from("campaign_requests")
+            .delete()
+            .eq("id", id);
+
+          if (error) throw error;
+
+          detailsModal.style.display = "none";
+          alert("Campaign request successfully deleted!");
+          loadCampaignData();
+        } catch (err) {
+          console.error("Delete Error:", err);
+          alert("Failed to delete request: " + err.message);
+        } finally {
+          btnDeleteRequest.textContent = originalText;
+          btnDeleteRequest.disabled = false;
+        }
+      } else {
+        // Offline Simulated delete fallback
+        setTimeout(() => {
+          campaignRequests = campaignRequests.filter(r => r.id !== id);
+          computeMetrics();
+          renderRequestsTable();
+          detailsModal.style.display = "none";
+          alert("Simulation telemetry state deleted successfully (Offline Demo)!");
+          btnDeleteRequest.textContent = originalText;
+          btnDeleteRequest.disabled = false;
+        }, 1000);
+      }
+    });
+  }
 
 });
