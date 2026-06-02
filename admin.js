@@ -84,12 +84,15 @@ document.addEventListener("DOMContentLoaded", () => {
     window.location.reload();
   });
 
-  // Check if Supabase client is active
+  // Check if Supabase client is active and properly initialized
   function isSupabaseConfigured() {
     return (
       typeof supabase !== "undefined" &&
       supabase &&
-      !supabase.supabaseUrl.includes("your-project-id")
+      supabase.auth &&
+      typeof SUPABASE_URL !== "undefined" &&
+      SUPABASE_URL &&
+      !SUPABASE_URL.includes("your-project-id")
     );
   }
 
