@@ -425,7 +425,7 @@
       btn.disabled = true;
 
       // Check if supabase is initialized and key has been updated
-      if (typeof supabase !== 'undefined' && supabase && !supabase.supabaseUrl.includes("your-project-id")) {
+      if (typeof supabase !== 'undefined' && supabase && typeof SUPABASE_URL !== 'undefined' && SUPABASE_URL && !SUPABASE_URL.includes("your-project-id")) {
         try {
           const { error } = await supabase
             .from('campaign_requests')
