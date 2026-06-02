@@ -2,6 +2,21 @@
 // Manages authentication, dynamic metrics computation, filters, details, and updates.
 
 document.addEventListener("DOMContentLoaded", () => {
+  // Inline robust initialization of Supabase client to prevent any script load failures or local storage overrides
+  const SUPABASE_URL = "https://sfjjgsuchsfsohzqrojr.supabase.co";
+  const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InNmampnc3VjaHNmc29oenFyb2pyIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODAzNjgwODYsImV4cCI6MjA5NTk0NDA4Nn0.BGhYAJX8VlKUaYbtSiROBQevoeumLtcqnzZUrIicVPg";
+  
+  let supabase = null;
+  try {
+    if (typeof window.supabase !== 'undefined' && window.supabase) {
+      supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+    } else if (typeof supabase !== 'undefined' && supabase) {
+      supabase = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+    }
+  } catch (err) {
+    console.error("Supabase client failed to initialize inline in admin.js:", err);
+  }
+
   // DOM Elements
   const authPanel = document.getElementById("auth-panel");
   const dashboardPanel = document.getElementById("dashboard-panel");
