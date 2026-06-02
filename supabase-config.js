@@ -3,7 +3,7 @@
 // Settings -> API -> Project API Keys (https://supabase.com/dashboard/project/_/settings/api)
 
 const SUPABASE_URL = "https://your-project-id.supabase.co";
-const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.your-anon-key";
+const SUPABASE_ANON_KEY = "sb_publishable_QiWUOdg3g-HA4KWxpiQPpA_xl2OK1k7";
 
 let supabase;
 
