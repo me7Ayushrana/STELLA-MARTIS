@@ -423,10 +423,24 @@
       btn.textContent = 'TRANSMITTING...';
       btn.disabled = true;
 
-      // Check if supabase is initialized and key has been updated
-      if (typeof supabase !== 'undefined' && supabase && typeof SUPABASE_URL !== 'undefined' && SUPABASE_URL && !SUPABASE_URL.includes("your-project-id")) {
+      // Inline robust initialization of Supabase client to prevent any script load failures
+      const SUPABASE_URL = "https://sfjjgsuchsfsohzqrojr.supabase.co";
+      const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InNmampnc3VjaHNmc29oenFyb2pyIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODAzNjgwODYsImV4cCI6MjA5NTk0NDA4Nn0.BGhYAJX8VlKUaYbtSiROBQevoeumLtcqnzZUrIicVPg";
+      
+      let client = null;
+      try {
+        if (typeof window.supabase !== 'undefined' && window.supabase) {
+          client = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+        } else if (typeof supabase !== 'undefined' && supabase) {
+          client = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+        }
+      } catch (err) {
+        console.error("Supabase client failed to initialize inline:", err);
+      }
+
+      if (client) {
         try {
-          const { error } = await supabase
+          const { error } = await client
             .from('campaign_requests')
             .insert([formData]);
 
@@ -441,8 +455,8 @@
           alert("Error sending campaign brief: " + error.message);
         }
       } else {
-        // Fallback for demo when Supabase is not configured yet
-        console.warn("Supabase is not configured. Running offline simulation demo.");
+        // Fallback for demo when Supabase is not loaded yet
+        console.warn("Supabase SDK is not loaded. Running offline simulation demo.");
         setTimeout(() => {
           btn.textContent = 'DEMO RECEIVED (OFFLINE)';
           btn.style.backgroundColor = '#2e7d32';
