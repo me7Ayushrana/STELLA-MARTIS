@@ -115,6 +115,11 @@ document.addEventListener("DOMContentLoaded", () => {
     // Login Form Submit
     loginForm.addEventListener("submit", async (e) => {
       e.preventDefault();
+      const loginErrorMsg = document.getElementById("login-error-msg");
+      if (loginErrorMsg) {
+        loginErrorMsg.style.display = "none";
+        loginErrorMsg.textContent = "";
+      }
       btnLoginSubmit.textContent = "ESTABLISHING LINK...";
       btnLoginSubmit.disabled = true;
 
@@ -127,7 +132,12 @@ document.addEventListener("DOMContentLoaded", () => {
         if (error) throw error;
       } catch (err) {
         console.error("Login Failed:", err);
-        alert("Authentication Error: " + err.message);
+        if (loginErrorMsg) {
+          loginErrorMsg.textContent = `ERROR: ${err.message.toUpperCase()}`;
+          loginErrorMsg.style.display = "block";
+        } else {
+          alert("Authentication Error: " + err.message);
+        }
       } finally {
         btnLoginSubmit.textContent = "ESTABLISH LINK";
         btnLoginSubmit.disabled = false;
