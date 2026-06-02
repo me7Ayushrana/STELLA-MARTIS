@@ -2,7 +2,7 @@
 // Replace these placeholders with your actual Supabase URL and Anon Key from:
 // Settings -> API -> Project API Keys (https://supabase.com/dashboard/project/_/settings/api)
 
-const SUPABASE_URL = "https://your-project-id.supabase.co";
+const SUPABASE_URL = "https://sfjjgsuchsfsohzqrojr.supabase.co";
 const SUPABASE_ANON_KEY = "sb_publishable_QiWUOdg3g-HA4KWxpiQPpA_xl2OK1k7";
 
 let supabase;
