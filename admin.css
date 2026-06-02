@@ -1,0 +1,533 @@
+/* ==========================================================================
+   STELLA MARTIS — ADMIN TELEMETRY DASHBOARD STYLING
+   ========================================================================== */
+
+/* Variables / Themes */
+:root {
+  --success: #2ecc71;
+  --success-glow: rgba(46, 204, 113, 0.35);
+  --warning: #f39c12;
+  --warning-glow: rgba(243, 156, 18, 0.35);
+  --info: #3498db;
+  --info-glow: rgba(52, 152, 219, 0.35);
+  --error: #e74c3c;
+  --error-glow: rgba(231, 76, 60, 0.35);
+  --border-color: rgba(255, 255, 255, 0.08);
+  --bg-panel: rgba(10, 10, 15, 0.85);
+  --font-mono: 'Share Tech Mono', 'Courier New', monospace;
+}
+
+.admin-body {
+  background-color: #040408;
+  color: #f5f5f7;
+  overflow-x: hidden;
+  font-family: 'Roboto', sans-serif;
+}
+
+/* Telemetry retro-futuristic grid overlay */
+.telemetry-grid-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background-image: 
+    linear-gradient(to right, rgba(216, 92, 50, 0.03) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(216, 92, 50, 0.03) 1px, transparent 1px);
+  background-size: 40px 40px;
+  z-index: -1;
+  pointer-events: none;
+}
+
+/* Header Adjustments */
+.admin-header {
+  border-bottom: 1px solid var(--border-color);
+  background: rgba(4, 4, 8, 0.9);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+}
+
+.admin-user-badge {
+  font-family: var(--font-mono);
+  background: rgba(216, 92, 50, 0.1);
+  border: 1px solid rgba(216, 92, 50, 0.3);
+  padding: 0.35rem 0.75rem;
+  border-radius: 4px;
+  font-size: 0.8rem;
+  color: var(--mars-orange);
+  letter-spacing: 0.05em;
+  display: inline-block;
+  margin-right: 1rem;
+}
+
+.btn-sm {
+  padding: 0.35rem 0.8rem;
+  font-size: 0.75rem;
+  letter-spacing: 0.1em;
+}
+
+.admin-container {
+  padding-top: 8rem;
+  min-height: 100vh;
+}
+
+/* ==========================================
+   1. AUTH SECTION
+   ========================================== */
+.auth-section {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: calc(80vh - 80px);
+}
+
+.login-card {
+  width: 100%;
+  max-width: 450px;
+  background: var(--bg-panel);
+  border: 1px solid var(--border-color);
+  padding: 3rem;
+  border-top: 4px solid var(--accent);
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.7);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border-radius: 4px;
+}
+
+.login-intro {
+  color: var(--text-muted);
+  font-size: 0.9rem;
+  margin-bottom: 2rem;
+  line-height: 1.5;
+}
+
+.login-help {
+  margin-top: 2rem;
+  padding-top: 1.5rem;
+  border-top: 1px dashed var(--border-color);
+  font-size: 0.75rem;
+  color: var(--text-muted);
+  line-height: 1.6;
+}
+
+/* ==========================================
+   2. DASHBOARD / METRICS
+   ========================================== */
+.dashboard-section {
+  display: flex;
+  flex-direction: column;
+  gap: 2.5rem;
+  animation: fadeIn 0.4s ease-out;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.admin-metrics-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 1.5rem;
+}
+
+.metric-card {
+  background: var(--bg-panel);
+  border: 1px solid var(--border-color);
+  border-radius: 4px;
+  padding: 1.75rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  transition: transform 0.2s ease, border-color 0.2s ease;
+}
+
+.metric-card:hover {
+  transform: translateY(-2px);
+  border-color: rgba(216, 92, 50, 0.25);
+}
+
+.metric-label {
+  font-family: var(--font-heading);
+  font-size: 0.75rem;
+  letter-spacing: 0.15em;
+  color: var(--text-muted);
+}
+
+.metric-value {
+  font-family: var(--font-mono);
+  font-size: 2.2rem;
+  font-weight: 700;
+  color: #fff;
+  text-shadow: 0 0 10px rgba(255, 255, 255, 0.1);
+}
+
+.metric-value.warning {
+  color: var(--warning);
+  text-shadow: 0 0 10px var(--warning-glow);
+}
+
+.metric-value.active {
+  color: var(--info);
+  text-shadow: 0 0 10px var(--info-glow);
+}
+
+.metric-value.success {
+  color: var(--success);
+  text-shadow: 0 0 10px var(--success-glow);
+}
+
+/* ==========================================
+   3. DATA LIST / TABLE CARD
+   ========================================== */
+.admin-main-card {
+  padding: 2rem;
+  background: var(--bg-panel);
+  border: 1px solid var(--border-color);
+  border-radius: 4px;
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  box-shadow: 0 15px 40px rgba(0, 0, 0, 0.4);
+}
+
+.admin-card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 1.5rem;
+  margin-bottom: 2rem;
+  border-bottom: 1px solid var(--border-color);
+  padding-bottom: 1.5rem;
+}
+
+.admin-card-header h3 {
+  font-family: var(--font-heading);
+  font-size: 1.25rem;
+  letter-spacing: 0.1em;
+  color: #fff;
+}
+
+.admin-controls {
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+  flex-wrap: wrap;
+}
+
+.search-box input {
+  padding: 0.5rem 1rem;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 4px;
+  color: #fff;
+  font-size: 0.85rem;
+  width: 240px;
+  transition: border-color 0.2s, background-color 0.2s;
+}
+
+.search-box input:focus {
+  outline: none;
+  border-color: var(--accent);
+  background: rgba(255, 255, 255, 0.07);
+}
+
+.filter-tabs {
+  display: flex;
+  background: rgba(255, 255, 255, 0.04);
+  padding: 0.25rem;
+  border-radius: 4px;
+  border: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+.filter-tab {
+  background: transparent;
+  border: none;
+  color: var(--text-muted);
+  font-family: var(--font-heading);
+  font-size: 0.75rem;
+  font-weight: 500;
+  letter-spacing: 0.08em;
+  padding: 0.4rem 1rem;
+  cursor: pointer;
+  border-radius: 2px;
+  transition: color 0.2s, background-color 0.2s;
+}
+
+.filter-tab:hover {
+  color: #fff;
+}
+
+.filter-tab.active {
+  background: var(--accent);
+  color: #fff;
+}
+
+/* Responsive Table */
+.table-container {
+  overflow-x: auto;
+  width: 100%;
+}
+
+.admin-table {
+  width: 100%;
+  border-collapse: collapse;
+  text-align: left;
+  font-size: 0.9rem;
+}
+
+.admin-table th, 
+.admin-table td {
+  padding: 1rem 1.25rem;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.04);
+}
+
+.admin-table th {
+  font-family: var(--font-heading);
+  font-size: 0.75rem;
+  letter-spacing: 0.15em;
+  color: var(--text-muted);
+  background: rgba(255, 255, 255, 0.02);
+  text-transform: uppercase;
+}
+
+.admin-table tbody tr {
+  transition: background-color 0.15s ease;
+}
+
+.admin-table tbody tr:hover {
+  background: rgba(216, 92, 50, 0.03);
+}
+
+.table-empty {
+  text-align: center;
+  padding: 3rem !important;
+  color: var(--text-muted);
+  font-family: var(--font-mono);
+  letter-spacing: 0.05em;
+}
+
+.time-mono {
+  font-family: var(--font-mono);
+  font-size: 0.8rem;
+  color: #bbb;
+}
+
+/* Status Badges */
+.badge {
+  font-family: var(--font-mono);
+  font-size: 0.7rem;
+  font-weight: 600;
+  letter-spacing: 0.05em;
+  padding: 0.25rem 0.6rem;
+  border-radius: 2px;
+  display: inline-block;
+  text-transform: uppercase;
+  border: 1px solid transparent;
+}
+
+.badge-pending {
+  background: rgba(243, 156, 18, 0.1);
+  border-color: rgba(243, 156, 18, 0.3);
+  color: var(--warning);
+}
+
+.badge-progress {
+  background: rgba(52, 152, 219, 0.1);
+  border-color: rgba(52, 152, 219, 0.3);
+  color: var(--info);
+}
+
+.badge-completed {
+  background: rgba(46, 204, 113, 0.1);
+  border-color: rgba(46, 204, 113, 0.3);
+  color: var(--success);
+}
+
+.badge-cancelled {
+  background: rgba(231, 76, 60, 0.1);
+  border-color: rgba(231, 76, 60, 0.3);
+  color: var(--error);
+}
+
+/* Action button in table */
+.btn-view {
+  font-family: var(--font-mono);
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  color: #fff;
+  padding: 0.3rem 0.75rem;
+  font-size: 0.75rem;
+  cursor: pointer;
+  border-radius: 2px;
+  transition: background-color 0.2s, border-color 0.2s;
+}
+
+.btn-view:hover {
+  background: var(--accent);
+  border-color: var(--accent);
+}
+
+/* ==========================================
+   4. MODALS & FORMS
+   ========================================== */
+.modal-backdrop {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: rgba(0, 0, 0, 0.75);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  z-index: 1000;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  animation: fadeIn 0.25s ease;
+  padding: 1.5rem;
+}
+
+.modal-card {
+  width: 100%;
+  max-width: 750px;
+  background: #0d0d12;
+  box-shadow: 0 30px 70px rgba(0, 0, 0, 0.9);
+  max-height: calc(100vh - 3rem);
+  overflow-y: auto;
+  border: 1px solid var(--border-color);
+  animation: scaleUp 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+@keyframes scaleUp {
+  from { opacity: 0; transform: scale(0.96); }
+  to { opacity: 1; transform: scale(1); }
+}
+
+.modal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.modal-header h3 {
+  font-family: var(--font-heading);
+  font-size: 1.15rem;
+  letter-spacing: 0.1em;
+  color: #fff;
+}
+
+.modal-close {
+  background: transparent;
+  border: none;
+  color: var(--text-muted);
+  font-size: 1.8rem;
+  cursor: pointer;
+  transition: color 0.15s;
+}
+
+.modal-close:hover {
+  color: #fff;
+}
+
+.modal-body {
+  margin-top: 1.5rem;
+}
+
+/* Detail Display Grid */
+.detail-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1.5rem;
+}
+
+.detail-item {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+}
+
+.detail-item.full-width {
+  grid-column: span 2;
+}
+
+.detail-label {
+  font-family: var(--font-heading);
+  font-size: 0.7rem;
+  letter-spacing: 0.1em;
+  color: var(--text-muted);
+}
+
+.detail-value {
+  font-size: 0.9rem;
+  font-weight: 500;
+  color: #fff;
+}
+
+.detail-box {
+  background: rgba(255, 255, 255, 0.02);
+  border: 1px solid var(--border-color);
+  padding: 1rem;
+  border-radius: 4px;
+  font-size: 0.85rem;
+  line-height: 1.6;
+  max-height: 200px;
+  overflow-y: auto;
+  color: #ddd;
+  white-space: pre-line;
+}
+
+/* Admin Dashboard Input Modifiers */
+.admin-select, 
+.admin-input {
+  width: 100%;
+  padding: 0.65rem 1rem;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  color: #fff;
+  border-radius: 4px;
+  font-size: 0.85rem;
+  transition: border-color 0.2s;
+}
+
+.admin-select:focus,
+.admin-input:focus {
+  outline: none;
+  border-color: var(--accent);
+}
+
+.settings-desc {
+  color: var(--text-muted);
+  font-size: 0.85rem;
+  line-height: 1.6;
+  margin-bottom: 1.5rem;
+}
+
+/* ==========================================
+   5. RESPONSIVE MEDIA QUERIES
+   ========================================== */
+@media (max-width: 768px) {
+  .admin-card-header {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+  .admin-controls {
+    width: 100%;
+    flex-direction: column;
+    align-items: stretch;
+  }
+  .search-box input {
+    width: 100%;
+  }
+  .filter-tabs {
+    justify-content: space-between;
+  }
+  .detail-grid {
+    grid-template-columns: 1fr;
+  }
+  .detail-item.full-width {
+    grid-column: span 1;
+  }
+}

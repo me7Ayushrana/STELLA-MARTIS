@@ -337,6 +337,10 @@
 
   </main>
 
+  <!-- Supabase Integration -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="supabase-config.js"></script>
+
   <script>
     // --- Mobile Menu Toggle ---
     const mobileToggle = document.getElementById('mobile-toggle');
@@ -401,21 +405,57 @@
       revealOnScroll.observe(el);
     });
 
-    // --- Form submission demo ---
-    document.querySelector('.agency-form').addEventListener('submit', (e) => {
+    // --- Form submission with Supabase Integration ---
+    document.querySelector('.agency-form').addEventListener('submit', async (e) => {
       e.preventDefault();
       const btn = e.target.querySelector('button');
       const originalText = btn.textContent;
+      
+      const formData = {
+        organization: e.target.organization.value,
+        email: e.target.email.value,
+        hardware: e.target.hardware.value,
+        conditions: e.target.conditions.value || null,
+        timeline: e.target.timeline.value || null,
+        deliverables: e.target.deliverables.value || null,
+        spiti_team: e.target.spiti_team.value || null,
+      };
+
       btn.textContent = 'TRANSMITTING...';
-      setTimeout(() => {
-        btn.textContent = 'BRIEF RECEIVED';
-        btn.style.backgroundColor = '#2e7d32';
+      btn.disabled = true;
+
+      // Check if supabase is initialized and key has been updated
+      if (typeof supabase !== 'undefined' && supabase && !supabase.supabaseUrl.includes("your-project-id")) {
+        try {
+          const { error } = await supabase
+            .from('campaign_requests')
+            .insert([formData]);
+
+          if (error) throw error;
+
+          btn.textContent = 'BRIEF RECEIVED';
+          btn.style.backgroundColor = '#2e7d32';
+        } catch (error) {
+          console.error("Supabase Submission Error:", error);
+          btn.textContent = 'TRANSMISSION ERROR';
+          btn.style.backgroundColor = '#d32f2f';
+          alert("Error sending campaign brief: " + error.message);
+        }
+      } else {
+        // Fallback for demo when Supabase is not configured yet
+        console.warn("Supabase is not configured. Running offline simulation demo.");
         setTimeout(() => {
-          btn.textContent = originalText;
-          btn.style.backgroundColor = '';
-          e.target.reset();
-        }, 3000);
-      }, 1500);
+          btn.textContent = 'DEMO RECEIVED (OFFLINE)';
+          btn.style.backgroundColor = '#2e7d32';
+        }, 1200);
+      }
+
+      setTimeout(() => {
+        btn.textContent = originalText;
+        btn.style.backgroundColor = '';
+        btn.disabled = false;
+        e.target.reset();
+      }, 4000);
     });
   </script>
 </body>
